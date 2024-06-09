@@ -6,7 +6,7 @@ import * as Layer from "effect/Layer";
 import * as kysely from "kysely";
 
 export const make = <DB, Self>(id: string) =>
-  class MsSqlDatabase extends Database.make<DB, Self>(id) {
+  class MySql2Database extends Database.make<DB, Self>(id) {
     static layer = <E, R>(options: {
       readonly acquire: Effect.Effect<kysely.Kysely<DB>, E, R | Scope.Scope>;
       readonly spanAttributes?: ReadonlyArray<readonly [string, string]>;
