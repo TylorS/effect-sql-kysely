@@ -88,7 +88,7 @@ type GetUpdateEncoded<T> = T extends ColumnTypes<any, any, infer Update>
   ? Schema.Schema.Encoded<Update>
   : Schema.Schema.Encoded<T>;
 
-export interface Table<Columns extends Record<string, Schema.Schema.Any>>
+export interface Table<Columns extends Record<string, Schema.Schema.All | Schema.PropertySignature.All>>
   extends Schema.Struct<Columns>,
     ColumnTypes<
       Schema.Struct<{
@@ -114,7 +114,7 @@ export interface Table<Columns extends Record<string, Schema.Schema.Any>>
       }>
     > {}
 
-export const Table = <Columns extends Record<string, Schema.Schema.Any>>(
+export const Table = <Columns extends Record<string, Schema.Schema.All | Schema.PropertySignature.All>>(
   columns: Columns
 ): Table<Columns> => {
   const select: any = Schema.Struct(
