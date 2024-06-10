@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@effect/language-service':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@effect/schema':
         specifier: ^0.67.21
         version: 0.67.21(effect@3.3.0)
@@ -122,6 +125,9 @@ packages:
   '@azure/msal-node@2.9.1':
     resolution: {integrity: sha512-I9Pc78mXwj/K8ydSgTfZ5A20vQ/xvfgnnhSCkienZ29b59zFy/hb2Vxmc6Gvg5pNkimSqkPnAtGoBMxYOLBm1A==}
     engines: {node: '>=16'}
+
+  '@effect/language-service@0.1.0':
+    resolution: {integrity: sha512-BnlM8LlaqCAYgdRfxlbR7gXGh/FD1scL1fPgNVJEPoOM08od1jtJz+iKhwfaud8TPnnhZR+TED2h5ynjanLeCQ==}
 
   '@effect/platform@0.56.0':
     resolution: {integrity: sha512-Ri4yEaxNWtBVJCZMyht0apKokNnT/4FVVkeXnPv9u0UAkb64yeprrCc71ItqMtgY8OnJEKWB5PTQu9UWJHpDdw==}
@@ -1662,6 +1668,8 @@ snapshots:
       '@azure/msal-common': 14.11.0
       jsonwebtoken: 9.0.2
       uuid: 8.3.2
+
+  '@effect/language-service@0.1.0': {}
 
   '@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)':
     dependencies:

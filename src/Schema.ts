@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Schema } from "@effect/schema";
 import { hasProperty } from "effect/Predicate";
 import * as kysely from "kysely";

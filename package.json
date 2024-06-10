@@ -2,10 +2,12 @@
   "name": "effect-sql-kysely",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "The contributors",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "vitest 'test/**/*'"
   },
   "keywords": [
     "Effect",
@@ -17,6 +19,7 @@
   "license": "MIT",
   "packageManager": "pnpm@9.0.6+sha1.648f6014eb363abb36618f2ba59282a9eeb3e879",
   "devDependencies": {
+    "@effect/language-service": "^0.1.0",
     "@effect/schema": "^0.67.21",
     "@effect/sql": "^0.3.9",
     "@effect/sql-mssql": "^0.3.10",
@@ -44,5 +47,12 @@
     "@effect/sql-mssql": "^0.3.10",
     "@effect/sql-mysql2": "^0.3.10",
     "@effect/sql-pg": "^0.3.10"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./dist/*": "./dist/*.js"
   }
 }
