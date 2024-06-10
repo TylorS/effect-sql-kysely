@@ -10,8 +10,7 @@
     "test": "vitest 'test/**/*'"
   },
   "publishConfig": {
-    "access": "public",
-    "directory": "dist"
+    "access": "public"  
   },
   "keywords": [
     "Effect",
