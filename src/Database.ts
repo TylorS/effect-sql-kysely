@@ -9,18 +9,6 @@ import { makeSqlClient } from "./internal/makeSqlClient.js";
 import { makeResolver } from "./internal/makeResolver.js";
 import { makeSchema } from "./internal/makeSchema.js";
 
-// Make Kysely CompiledQuery and Compilable interfaces invariant 
-// such that type - safety is consistent with Schemas
-declare module "kysely" {
-  export interface CompiledQuery<in out O> {
-    readonly _O: O;
-  }
-
-  export interface Compilable<in out O> {
-    compile(): CompiledQuery<O>;
-  }
-}
-
 export interface KyselyDatabase<DB> {
   readonly sql: Sql.client.Client;
   readonly db: kysely.Kysely<DB>;
@@ -43,24 +31,24 @@ export const make = <DB, Self>(id: string) =>
       Layer.scoped(
         this,
         Effect.gen(function* (_) {
-          const db = yield* _(
-            Effect.acquireRelease(options.acquire, (db) =>
-              Effect.promise(() => db.destroy())
+          const database = yield* _(
+            Effect.acquireRelease(options.acquire, (database) =>
+              Effect.promise(() => database.destroy())
             )
           );
-          const sql = makeSqlClient({ ...options, database: db });
+          const sql = makeSqlClient({ ...options, database });
           const kysely = <Out extends object>(
             f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>
           ) => {
             // We utilize compile() and sql.unsafe to enable utilizing Effect's notion of a Transaction
-            const compiled = f(db).compile();
+            const compiled = f(database).compile();
             return sql.unsafe<Out>(
               compiled.sql,
               compiled.parameters as ReadonlyArray<Primitive>
             );
           };
 
-          return { sql, db, kysely };
+          return { sql, db: database, kysely };
         })
       );
     
