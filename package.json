@@ -9,6 +9,10 @@
     "build": "tsc",
     "test": "vitest 'test/**/*'"
   },
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
+  },
   "keywords": [
     "Effect",
     "SQL",
