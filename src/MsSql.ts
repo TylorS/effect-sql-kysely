@@ -5,7 +5,9 @@ import * as Scope from "effect/Scope";
 import * as Layer from "effect/Layer";
 import * as kysely from "kysely";
 
-export const make = <DB, Self>(id: string): MsSqlDatabaseConstructor<DB, Self> =>
+export const make = <DB, Self>(
+  id: string
+): MsSqlDatabaseConstructor<DB, Self> =>
   class MsSqlDatabase extends Database.make<DB, Self>(id) {
     static layer = <E, R>(options: {
       readonly acquire: Effect.Effect<kysely.Kysely<DB>, E, R | Scope.Scope>;
@@ -18,9 +20,8 @@ export const make = <DB, Self>(id: string): MsSqlDatabaseConstructor<DB, Self> =
       });
   };
 
-
-
-export interface MsSqlDatabaseConstructor<DB, Self> extends Database.CoreDatabaseConstructor<DB, Self> { 
+export interface MsSqlDatabaseConstructor<DB, Self>
+  extends Database.CoreDatabaseConstructor<DB, Self> {
   readonly layer: <E, R>(options: {
     readonly acquire: Effect.Effect<kysely.Kysely<DB>, E, R | Scope.Scope>;
     readonly spanAttributes?: ReadonlyArray<readonly [string, string]>;

@@ -5,7 +5,9 @@ import * as Scope from "effect/Scope";
 import * as Layer from "effect/Layer";
 import * as kysely from "kysely";
 
-export const make = <DB, Self>(id: string): SqliteDatabaseConstructor<DB, Self> =>
+export const make = <DB, Self>(
+  id: string
+): SqliteDatabaseConstructor<DB, Self> =>
   class SqliteDatabase extends Database.make<DB, Self>(id) {
     static layer = <E, R>(options: {
       readonly acquire: Effect.Effect<kysely.Kysely<DB>, E, R | Scope.Scope>;

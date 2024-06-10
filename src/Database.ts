@@ -67,16 +67,12 @@ export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> =>
   };
 
 const TagConstructor_ = <DB, Self>() =>
-  Context.Tag<string>(``)<
-    Self,
-    KyselyDatabase<DB>
-  >();
+  Context.Tag<string>(``)<Self, KyselyDatabase<DB>>();
 
 export interface CoreDatabaseConstructor<DB, Self>
   extends ReturnType<typeof TagConstructor_<DB, Self>> {
-  
   readonly resolver: ReturnType<typeof makeResolver<Self, DB>>;
-  
+
   readonly schema: ReturnType<typeof makeSchema<Self, DB>>;
 
   readonly client: Effect.Effect<Sql.client.Client, never, Self>;
@@ -90,7 +86,8 @@ export interface CoreDatabaseConstructor<DB, Self>
   ) => Effect.Effect<A, Sql.error.SqlError | E, Self | R>;
 }
 
-export interface DatabaseConstructor<DB, Self> extends CoreDatabaseConstructor<DB, Self> { 
+export interface DatabaseConstructor<DB, Self>
+  extends CoreDatabaseConstructor<DB, Self> {
   readonly layer: <E, R>(options: {
     readonly acquire: Effect.Effect<kysely.Kysely<DB>, E, R | Scope.Scope>;
     readonly compiler: Sql.statement.Compiler;
