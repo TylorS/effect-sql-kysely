@@ -2,6 +2,7 @@
 
 import { Schema } from "@effect/schema";
 import { hasProperty } from "effect/Predicate";
+import * as Record from "effect/Record";
 import * as kysely from "kysely";
 
 export const ColumnTypesId = Symbol.for("effect-sql-kysely/ColumnTypesId");
@@ -106,7 +107,8 @@ export const JsonColumnType = <
   >,
   Schema.Schema.Context<typeof select | Insert | Update>
 > &
-  ColumnTypes<typeof select, Insert, Update> => ColumnType(select, insert, update);
+  ColumnTypes<typeof select, Insert, Update> =>
+  ColumnType(select, insert, update);
 
 type GetSelectType<T> = T extends ColumnTypes<infer Select, any, any>
   ? Schema.Schema.Type<Select>
@@ -127,12 +129,8 @@ type GetUpdateEncoded<T> = T extends ColumnTypes<any, any, infer Update>
   ? Schema.Schema.Encoded<Update>
   : Schema.Schema.Encoded<T>;
 
-export interface Table<
-  Columns extends Record<
-    string,
-    Schema.Schema.All | Schema.PropertySignature.All
-  >
-> extends Schema.Struct<Columns>,
+export interface Table<Columns extends Schema.Struct.Fields>
+  extends Schema.Struct<Columns>,
     ColumnTypes<
       Schema.Struct<{
         readonly [K in keyof Columns]: Schema.Schema<
@@ -157,37 +155,17 @@ export interface Table<
       }>
     > {}
 
-export const Table = <
-  Columns extends Record<
-    string,
-    Schema.Schema.All | Schema.PropertySignature.All
-  >
->(
+export const Table = <Columns extends Schema.Struct.Fields>(
   columns: Columns
 ): Table<Columns> => {
   const select: any = Schema.Struct(
-    Object.fromEntries(
-      Object.entries(columns).map(([k, v]) => [
-        k,
-        isColumnTypes(v) ? v.select : v,
-      ]) as any
-    )
+    Record.map(columns, (v) => (isColumnTypes(v) ? v.select : v))
   );
   const insert: any = Schema.Struct(
-    Object.fromEntries(
-      Object.entries(columns).map(([k, v]) => [
-        k,
-        isColumnTypes(v) ? v.insert : v,
-      ])
-    )
+    Record.map(columns, (v) => (isColumnTypes(v) ? v.insert : v))
   );
   const update: any = Schema.Struct(
-    Object.fromEntries(
-      Object.entries(columns).map(([k, v]) => [
-        k,
-        isColumnTypes(v) ? v.update : v,
-      ])
-    )
+    Record.map(columns, (v) => (isColumnTypes(v) ? v.update : v))
   );
 
   return Object.assign(Schema.Struct(columns), {
