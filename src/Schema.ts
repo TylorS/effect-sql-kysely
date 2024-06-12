@@ -8,9 +8,9 @@ export const ColumnTypesId = Symbol.for("effect-sql-kysely/ColumnTypesId");
 export type ColumnTypesId = typeof ColumnTypesId;
 
 export interface ColumnTypes<
-  Select extends Schema.Schema.Any,
-  Insert extends Schema.Schema.Any,
-  Update extends Schema.Schema.Any
+  Select extends Schema.Schema.All,
+  Insert extends Schema.Schema.All,
+  Update extends Schema.Schema.All
 > {
   readonly [ColumnTypesId]: ColumnTypesId;
   readonly select: Select;
@@ -19,9 +19,9 @@ export interface ColumnTypes<
 }
 
 export const ColumnType = <
-  Select extends Schema.Schema.Any,
-  Insert extends Schema.Schema.Any,
-  Update extends Schema.Schema.Any
+  Select extends Schema.Schema.All,
+  Insert extends Schema.Schema.All,
+  Update extends Schema.Schema.All
 >(
   select: Select,
   insert: Insert,
@@ -69,6 +69,45 @@ export const Generated = <A, I, R>(
     typeof schema
   > => ColumnType(schema, Schema.UndefinedOr(schema), schema);
 
+export const GeneratedAlways = <A, I, R>(
+  schema: Schema.Schema<A, I, R>
+): Schema.Schema<kysely.GeneratedAlways<A>, kysely.GeneratedAlways<I>, R> &
+  ColumnTypes<typeof schema, typeof Schema.Never, typeof Schema.Never> =>
+  ColumnType(schema, Schema.Never, Schema.Never);
+
+export const JsonColumnType = <
+  SelectType extends object | null,
+  SelectEncoded extends object | null,
+  SelectContext,
+  Insert extends Schema.Schema<string, string, any> = Schema.Schema<
+    string,
+    string,
+    never
+  >,
+  Update extends Schema.Schema<string, string, any> = Schema.Schema<
+    string,
+    string,
+    never
+  >
+>(
+  select: Schema.Schema<SelectType, SelectEncoded, SelectContext>,
+  insert: Insert = Schema.String as any,
+  update: Update = Schema.String as any
+): Schema.Schema<
+  kysely.JSONColumnType<
+    Schema.Schema.Type<typeof select>,
+    Schema.Schema.Type<Insert>,
+    Schema.Schema.Type<Update>
+  >,
+  kysely.JSONColumnType<
+    Schema.Schema.Encoded<typeof select>,
+    Schema.Schema.Encoded<Insert>,
+    Schema.Schema.Encoded<Update>
+  >,
+  Schema.Schema.Context<typeof select | Insert | Update>
+> &
+  ColumnTypes<typeof select, Insert, Update> => ColumnType(select, insert, update);
+
 type GetSelectType<T> = T extends ColumnTypes<infer Select, any, any>
   ? Schema.Schema.Type<Select>
   : Schema.Schema.Type<T>;
@@ -88,8 +127,12 @@ type GetUpdateEncoded<T> = T extends ColumnTypes<any, any, infer Update>
   ? Schema.Schema.Encoded<Update>
   : Schema.Schema.Encoded<T>;
 
-export interface Table<Columns extends Record<string, Schema.Schema.All | Schema.PropertySignature.All>>
-  extends Schema.Struct<Columns>,
+export interface Table<
+  Columns extends Record<
+    string,
+    Schema.Schema.All | Schema.PropertySignature.All
+  >
+> extends Schema.Struct<Columns>,
     ColumnTypes<
       Schema.Struct<{
         readonly [K in keyof Columns]: Schema.Schema<
@@ -114,7 +157,12 @@ export interface Table<Columns extends Record<string, Schema.Schema.All | Schema
       }>
     > {}
 
-export const Table = <Columns extends Record<string, Schema.Schema.All | Schema.PropertySignature.All>>(
+export const Table = <
+  Columns extends Record<
+    string,
+    Schema.Schema.All | Schema.PropertySignature.All
+  >
+>(
   columns: Columns
 ): Table<Columns> => {
   const select: any = Schema.Struct(
