@@ -56,8 +56,8 @@ describe("database", () => {
 
   it.effect("should allow making SQL queries", () =>
     Effect.gen(function* (_) {
-      const created = yield* _(createUser("Test"));
-      const selected = yield* _(findUser(created.id));
+      const created = yield* createUser("Test");
+      const selected = yield* findUser(created.id);
 
       expect(Option.some(created)).toEqual(selected);
     }).pipe(Effect.provide(TestDatabase.layer({ acquire })), Effect.scoped)
@@ -65,8 +65,8 @@ describe("database", () => {
 
   it.effect("should allow making SQL queries with transactions", () =>
     Effect.gen(function* (_) {
-      const created = yield* _(createUser("Test"));
-      const selected = yield* _(findUser(created.id));
+      const created = yield* createUser("Test");
+      const selected = yield* findUser(created.id);
 
       expect(Option.some(created)).toEqual(selected);
     }).pipe(
