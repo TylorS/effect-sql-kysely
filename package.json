@@ -7,7 +7,7 @@
   "author": "The contributors",
   "scripts": {
     "build": "tsc",
-    "test": "vitest 'test/**/*'"
+    "test": "vitest --dir test"
   },
   "publishConfig": {
     "access": "public"
