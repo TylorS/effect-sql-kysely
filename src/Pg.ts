@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 import * as Database from "./Database.js";
-import * as Client from "@effect/sql-pg/Client";
+import * as Client from "@effect/sql-pg";
 import * as Scope from "effect/Scope";
 import * as Layer from "effect/Layer";
 import * as kysely from "kysely";
@@ -14,7 +14,7 @@ export const make = <DB, Self>(id: string): PgDatabaseConstructor<DB, Self> =>
     }): Layer.Layer<Self, E, Exclude<R, Scope.Scope>> =>
       super.layer({
         ...options,
-        compiler: Client.makeCompiler(),
+        compiler: Client.PgClient.makeCompiler(),
       });
   };
 

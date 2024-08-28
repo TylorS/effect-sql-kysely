@@ -10,11 +10,11 @@ import { makeResolver } from "./internal/makeResolver.js";
 import { makeSchema } from "./internal/makeSchema.js";
 
 export interface KyselyDatabase<DB> {
-  readonly sql: Sql.client.Client;
+  readonly sql: Sql.SqlClient.SqlClient;
   readonly db: kysely.Kysely<DB>;
   readonly kysely: <Out extends object>(
     f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>
-  ) => Effect.Effect<ReadonlyArray<Out>, Sql.error.SqlError, never>;
+  ) => Effect.Effect<ReadonlyArray<Out>, Sql.SqlError.SqlError, never>;
 }
 
 export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> =>
@@ -24,7 +24,7 @@ export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> =>
 
     static readonly layer = <E, R>(options: {
       readonly acquire: Effect.Effect<kysely.Kysely<DB>, E, R | Scope.Scope>;
-      readonly compiler: Sql.statement.Compiler;
+      readonly compiler: Sql.Statement.Compiler;
       readonly spanAttributes?: ReadonlyArray<readonly [string, string]>;
       readonly chunkSize?: number;
     }): Layer.Layer<Self, E, Exclude<R, Scope.Scope>> =>
@@ -52,20 +52,25 @@ export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> =>
         })
       );
 
-    static readonly client: Effect.Effect<Sql.client.Client, never, Self> =
-      Effect.map(this, ({ sql }) => sql);
+    static readonly client: Effect.Effect<
+      Sql.SqlClient.SqlClient,
+      never,
+      Self
+    > = Effect.map(this, ({ sql }) => sql);
 
     static readonly kysely = <Out extends object>(
       f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>
-    ): Effect.Effect<ReadonlyArray<Out>, Sql.error.SqlError, Self> =>
+    ): Effect.Effect<ReadonlyArray<Out>, Sql.SqlError.SqlError, Self> =>
       Effect.flatMap(this, ({ kysely }) => kysely(f));
 
     static readonly withTransaction = <A, E, R>(
       effect: Effect.Effect<A, E, R>
-    ): Effect.Effect<A, Sql.error.SqlError | E, Self | R> =>
+    ): Effect.Effect<A, Sql.SqlError.SqlError | E, Self | R> =>
       Effect.flatMap(this, ({ sql }) => sql.withTransaction(effect));
   };
 
+// Used only for the Type
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TagConstructor_ = <DB, Self>() =>
   Context.Tag<string>(``)<Self, KyselyDatabase<DB>>();
 
@@ -75,22 +80,22 @@ export interface CoreDatabaseConstructor<DB, Self>
 
   readonly schema: ReturnType<typeof makeSchema<Self, DB>>;
 
-  readonly client: Effect.Effect<Sql.client.Client, never, Self>;
+  readonly client: Effect.Effect<Sql.SqlClient.SqlClient, never, Self>;
 
   readonly kysely: <Out extends object>(
     f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>
-  ) => Effect.Effect<ReadonlyArray<Out>, Sql.error.SqlError, Self>;
+  ) => Effect.Effect<ReadonlyArray<Out>, Sql.SqlError.SqlError, Self>;
 
   readonly withTransaction: <A, E, R>(
     effect: Effect.Effect<A, E, R>
-  ) => Effect.Effect<A, Sql.error.SqlError | E, Self | R>;
+  ) => Effect.Effect<A, Sql.SqlError.SqlError | E, Self | R>;
 }
 
 export interface DatabaseConstructor<DB, Self>
   extends CoreDatabaseConstructor<DB, Self> {
   readonly layer: <E, R>(options: {
     readonly acquire: Effect.Effect<kysely.Kysely<DB>, E, R | Scope.Scope>;
-    readonly compiler: Sql.statement.Compiler;
+    readonly compiler: Sql.Statement.Compiler;
     readonly spanAttributes?: ReadonlyArray<readonly [string, string]>;
     readonly chunkSize?: number;
   }) => Layer.Layer<Self, E, Exclude<R, Scope.Scope>>;

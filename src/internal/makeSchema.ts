@@ -22,11 +22,11 @@ export function makeSchema<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       request: IA
     ): Effect.Effect<
       ReadonlyArray<A>,
-      ParseResult.ParseError | Sql.error.SqlError,
+      ParseResult.ParseError | Sql.SqlError.SqlError,
       IR | AR | ID
     > =>
       Effect.flatMap(Tag, ({ kysely }) =>
-        Sql.schema.findAll({
+        Sql.SqlSchema.findAll({
           ...options,
           execute: (req) => kysely((db) => options.execute(db, req)),
         })(request)
@@ -45,11 +45,11 @@ export function makeSchema<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       request: IA
     ): Effect.Effect<
       ReadonlyArray<A>,
-      ParseResult.ParseError | Sql.error.SqlError,
+      ParseResult.ParseError | Sql.SqlError.SqlError,
       IR | AR | ID
     > =>
       Effect.flatMap(Tag, ({ kysely }) =>
-        Sql.schema.findAll({
+        Sql.SqlSchema.findAll({
           ...options,
           execute: (req) => kysely((db) => options.execute(db, req)),
         })(request)
@@ -65,11 +65,11 @@ export function makeSchema<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       request: IA
     ): Effect.Effect<
       Option.Option<A>,
-      ParseResult.ParseError | Sql.error.SqlError,
+      ParseResult.ParseError | Sql.SqlError.SqlError,
       IR | AR | ID
     > =>
       Effect.flatMap(Tag, ({ kysely }) =>
-        Sql.schema.findOne({
+        Sql.SqlSchema.findOne({
           ...options,
           execute: (req) => kysely((db) => options.execute(db, req)),
         })(request)
@@ -90,11 +90,11 @@ export function makeSchema<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       A,
       | ParseResult.ParseError
       | Cause.NoSuchElementException
-      | Sql.error.SqlError,
+      | Sql.SqlError.SqlError,
       IR | AR | ID
     > =>
       Effect.flatMap(Tag, ({ kysely }) =>
-        Sql.schema.single({
+        Sql.SqlSchema.single({
           ...options,
           execute: (req) => kysely((db) => options.execute(db, req)),
         })(request)
@@ -112,11 +112,11 @@ export function makeSchema<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       request: IA
     ): Effect.Effect<
       void,
-      ParseResult.ParseError | Sql.error.SqlError,
+      ParseResult.ParseError | Sql.SqlError.SqlError,
       IR | ID
     > =>
       Effect.flatMap(Tag, ({ kysely }) =>
-        Sql.schema.void({
+        Sql.SqlSchema.void({
           ...options,
           execute: (req) => kysely((db) => options.execute(req, db)),
         })(request)

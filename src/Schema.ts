@@ -42,12 +42,10 @@ export const ColumnType = <
 > &
   ColumnTypes<Select, Insert, Update> => {
   return Object.assign(
-    Schema.make<any, any, never>(Schema.Never.ast).pipe(
-      Schema.message(
-        () =>
-          `ColumnType Schema is not intended to be used directly. Utilize ColumnType.[select|insert|update]`
-      )
-    ),
+    Schema.make<any, any, never>(Schema.Never.ast).annotations({
+      message: () =>
+        `ColumnType Schema is not intended to be used directly. Utilize ColumnType.[select|insert|update]`,
+    }),
     {
       [ColumnTypesId]: ColumnTypesId,
       select,
