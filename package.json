@@ -7,7 +7,11 @@
   "author": "The contributors",
   "scripts": {
     "build": "tsc",
-    "test": "vitest --dir test"
+    "test": "vitest --dir test",
+    "test:run": "vitest run --dir test",
+    "release:patch": "pnpm build && pnpm test:run && pnpm version patch && pnpm publish",
+    "release:minor": "pnpm build && pnpm test:run && pnpm version minor && pnpm publish",
+    "release:major": "pnpm build && pnpm test:run && pnpm version major && pnpm publish"
   },
   "publishConfig": {
     "access": "public"
