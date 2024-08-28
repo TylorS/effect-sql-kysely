@@ -1,5 +1,5 @@
 import * as Sql from "@effect/sql";
-import type { Connection } from "@effect/sql/Connection";
+import type { SqlConnection } from "@effect/sql";
 import { type Primitive } from "@effect/sql/Statement";
 import { Chunk, Effect, Exit, Stream } from "effect";
 import { CompiledQuery, type Kysely } from "kysely";
@@ -13,16 +13,29 @@ export function makeSqlClient<DB>({
   chunkSize = 16,
 }: {
   database: Kysely<DB>;
-  compiler: Sql.statement.Compiler;
+  compiler: Sql.Statement.Compiler;
   spanAttributes?: ReadonlyArray<readonly [string, string]>;
   chunkSize?: number;
-}): Sql.client.Client {
-  const transformRows = Sql.statement.defaultTransforms((s) => s, false).array;
+}): Sql.SqlClient.SqlClient {
+  const transformRows = Sql.Statement.defaultTransforms((s) => s, false).array;
 
   // A Connection is a wrapper around a Kysely database connection, or Transaction, that provides
   // the ability to run queries within Effects and captures any errors that may occur.
-  class ConnectionImpl implements Connection {
+  class ConnectionImpl implements SqlConnection.Connection {
     constructor(private readonly db: Kysely<DB>) {}
+
+    executeUnprepared(
+      sql: string,
+      params?: ReadonlyArray<Primitive> | undefined
+    ): Effect.Effect<ReadonlyArray<unknown>, Sql.SqlError.SqlError> {
+      return Effect.tryPromise({
+        try: () =>
+          this.db
+            .executeQuery(compileSqlQuery(sql, params))
+            .then((r) => transformRows(r.rows)),
+        catch: (cause) => new Sql.SqlError.SqlError({ cause }),
+      });
+    }
 
     execute(sql: string, params: ReadonlyArray<Primitive>) {
       return Effect.tryPromise({
@@ -30,7 +43,7 @@ export function makeSqlClient<DB>({
           this.db
             .executeQuery(compileSqlQuery(sql, params))
             .then((r) => transformRows(r.rows)),
-        catch: (error) => new Sql.error.SqlError({ error }),
+        catch: (cause) => new Sql.SqlError.SqlError({ cause }),
       });
     }
 
@@ -40,7 +53,7 @@ export function makeSqlClient<DB>({
           this.db
             .executeQuery(compileSqlQuery(sql, params))
             .then((r) => r.rows),
-        catch: (error) => new Sql.error.SqlError({ error }),
+        catch: (cause) => new Sql.SqlError.SqlError({ cause }),
       });
     }
 
@@ -56,7 +69,7 @@ export function makeSqlClient<DB>({
           this.db
             .executeQuery(compileSqlQuery(sql, params))
             .then((r) => transformRows(r.rows)),
-        catch: (error) => new Sql.error.SqlError({ error }),
+        catch: (cause) => new Sql.SqlError.SqlError({ cause }),
       });
     }
 
@@ -68,7 +81,7 @@ export function makeSqlClient<DB>({
             this.db
               .getExecutor()
               .stream(query, chunkSize, { queryId: createQueryId() }),
-            (error) => new Sql.error.SqlError({ error })
+            (cause) => new Sql.SqlError.SqlError({ cause })
           ),
           Chunk.flatMap((result) => Chunk.unsafeFromArray(result.rows))
         )
@@ -78,7 +91,7 @@ export function makeSqlClient<DB>({
 
   const acquirer = Effect.succeed(new ConnectionImpl(database));
 
-  return Sql.client.make({
+  return Sql.SqlClient.make({
     // Our default connection is managed by Kysely
     acquirer,
     // Our SQL statement compiler

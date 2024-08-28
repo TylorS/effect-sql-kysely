@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 import * as Database from "./Database.js";
-import * as Client from "@effect/sql-mysql2/Client";
+import * as Client from "@effect/sql-mysql2";
 import * as Scope from "effect/Scope";
 import * as Layer from "effect/Layer";
 import * as kysely from "kysely";
@@ -16,7 +16,7 @@ export const make = <DB, Self>(
     }): Layer.Layer<Self, E, Exclude<R, Scope.Scope>> =>
       super.layer({
         ...options,
-        compiler: Client.makeCompiler(),
+        compiler: Client.MysqlClient.makeCompiler(),
       });
   };
 

@@ -23,12 +23,18 @@ export function makeResolver<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       ) => kysely.Compilable<Row>;
     }
   ): Effect.Effect<
-    Sql.resolver.SqlResolver<T, I, Option.Option<A>, Sql.error.SqlError, RI>,
+    Sql.SqlResolver.SqlResolver<
+      T,
+      I,
+      Option.Option<A>,
+      Sql.SqlError.SqlError,
+      RI
+    >,
     never,
     ID
   > =>
     Effect.flatMap(Tag, ({ kysely }) =>
-      Sql.resolver.findById(tag, {
+      Sql.SqlResolver.findById(tag, {
         ...options,
         execute: (requests) => kysely((db) => options.execute(db, requests)),
       })
@@ -50,12 +56,12 @@ export function makeResolver<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       ) => kysely.Compilable<Row>;
     }
   ): Effect.Effect<
-    Sql.resolver.SqlResolver<T, I, Array<A>, Sql.error.SqlError, RI>,
+    Sql.SqlResolver.SqlResolver<T, I, Array<A>, Sql.SqlError.SqlError, RI>,
     never,
     ID
   > =>
     Effect.flatMap(Tag, ({ kysely }) =>
-      Sql.resolver.grouped(tag, {
+      Sql.SqlResolver.grouped(tag, {
         ...options,
         execute: (requests) =>
           kysely<Row>((db) => options.execute(db, requests)),
@@ -73,18 +79,18 @@ export function makeResolver<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       ) => kysely.Compilable<IA>;
     }
   ): Effect.Effect<
-    Sql.resolver.SqlResolver<
+    Sql.SqlResolver.SqlResolver<
       T,
       I,
       A,
-      Sql.error.ResultLengthMismatch | Sql.error.SqlError,
+      Sql.SqlError.ResultLengthMismatch | Sql.SqlError.SqlError,
       RI
     >,
     never,
     ID
   > =>
     Effect.flatMap(Tag, ({ kysely }) =>
-      Sql.resolver.ordered(tag, {
+      Sql.SqlResolver.ordered(tag, {
         ...options,
         execute: (requests) => kysely((db) => options.execute(db, requests)),
       })
@@ -100,12 +106,12 @@ export function makeResolver<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
       ) => kysely.Compilable<object>;
     }
   ): Effect.Effect<
-    Sql.resolver.SqlResolver<T, I, void, Sql.error.SqlError, RI>,
+    Sql.SqlResolver.SqlResolver<T, I, void, Sql.SqlError.SqlError, RI>,
     never,
     ID
   > =>
     Effect.flatMap(Tag, ({ kysely }) =>
-      Sql.resolver.void(tag, {
+      Sql.SqlResolver.void(tag, {
         ...options,
         execute: (requests) => kysely((db) => options.execute(db, requests)),
       })
