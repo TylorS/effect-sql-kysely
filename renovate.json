@@ -1,0 +1,53 @@
+{
+	"extends": [
+		"config:base"
+	],
+	"baseBranches": [
+		"development"
+	],
+	"packageRules": [
+		{
+			"matchDepTypes": [
+				"peerDependencies"
+			],
+			"groupName": "peer and related dependencies",
+			"groupSlug": "peer-related-deps",
+			"updateTypes": [
+				"patch",
+				"minor"
+			],
+			"additionalBranchPrefix": "peer-deps/",
+			"matchPackagePatterns": [
+				"@effect/*",
+				"effect",
+				"kysely"
+			],
+			"schedule": [
+				"before 5am on Monday"
+			]
+		},
+		{
+			"matchPackagePatterns": [
+				"@effect/*",
+				"effect",
+				"kysely"
+			],
+			"groupName": "effect and kysely dependencies",
+			"groupSlug": "effect-kysely-deps",
+			"updateTypes": [
+				"patch",
+				"minor"
+			],
+			"schedule": [
+				"before 5am on Monday"
+			]
+		}
+	],
+	"branchPrefix": "renovate/",
+	"prHourlyLimit": 5,
+	"prConcurrentLimit": 10,
+	"dependencyDashboard": true,
+	"labels": [
+		"dependencies"
+	]
+}
