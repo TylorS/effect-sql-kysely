@@ -9,30 +9,30 @@ importers:
   .:
     dependencies:
       '@effect/platform':
-        specifier: ^0.66.0
-        version: 0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
+        specifier: ^0.68.0
+        version: 0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
     devDependencies:
       '@effect/language-service':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
       '@effect/schema':
-        specifier: ^0.74.0
-        version: 0.74.1(effect@3.8.4)
+        specifier: ^0.75.0
+        version: 0.75.5(effect@3.9.2)
       '@effect/sql':
-        specifier: ^0.14.0
-        version: 0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
+        specifier: ^0.16.0
+        version: 0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
       '@effect/sql-mssql':
-        specifier: ^0.14.0
-        version: 0.14.0(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/sql@0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(effect@3.8.4)
+        specifier: ^0.16.0
+        version: 0.16.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/sql@0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(effect@3.9.2)
       '@effect/sql-mysql2':
-        specifier: ^0.14.0
-        version: 0.14.0(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/sql@0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(effect@3.8.4)
+        specifier: ^0.16.0
+        version: 0.16.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/sql@0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(effect@3.9.2)
       '@effect/sql-pg':
-        specifier: ^0.14.0
-        version: 0.14.0(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/sql@0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(effect@3.8.4)
+        specifier: ^0.16.0
+        version: 0.16.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/sql@0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(effect@3.9.2)
       '@effect/vitest':
-        specifier: ^0.10.0
-        version: 0.10.4(effect@3.8.4)(vitest@2.1.1(@types/node@22.5.4)(terser@5.31.6))
+        specifier: ^0.12.0
+        version: 0.12.1(effect@3.9.2)(vitest@2.1.1(@types/node@22.5.4)(terser@5.31.6))
       '@eslint/js':
         specifier: ^9.9.1
         version: 9.11.1
@@ -41,7 +41,7 @@ importers:
         version: 11.3.0
       effect:
         specifier: ^3.6.7
-        version: 3.8.4
+        version: 3.9.2
       eslint:
         specifier: ^9.9.1
         version: 9.11.1
@@ -150,53 +150,53 @@ packages:
       ws:
         optional: true
 
-  '@effect/language-service@0.1.0':
-    resolution: {integrity: sha512-BnlM8LlaqCAYgdRfxlbR7gXGh/FD1scL1fPgNVJEPoOM08od1jtJz+iKhwfaud8TPnnhZR+TED2h5ynjanLeCQ==}
+  '@effect/language-service@0.2.0':
+    resolution: {integrity: sha512-DoK41yKGyQv79o0ca8gxEogMlt+IphXkdCXwgenbQjH1BXKD7tJAr0+VsDhblycQcvQ39f1l9NZN9CBqjM9ALA==}
 
-  '@effect/platform@0.66.2':
-    resolution: {integrity: sha512-Gqr+C8GhjC9Ix1JdakDVaWbJcy9qISN8wNz6OdLjiWL1aR3glAscEgICTuB3TOH7F6e3M/PK3RYhsuwVgo63QA==}
+  '@effect/platform@0.68.6':
+    resolution: {integrity: sha512-0dLbgfZGxMQqxGX7hFCkpqI9N0vFXf0e5bLdplvjpEskB/VrFQXkz0j+aopztHwXJkG/4pp1HHLNLK3ZcU5FXQ==}
     peerDependencies:
-      '@effect/schema': ^0.74.1
-      effect: ^3.8.4
+      '@effect/schema': ^0.75.5
+      effect: ^3.9.2
 
-  '@effect/schema@0.74.1':
-    resolution: {integrity: sha512-koTi0M1MYUjEDawLmksXBROROLx0BEG2ErwVGLVawmwuBwVbw1MTEd0QlG2+jds5avYXCJp67rHS7cuIxmnBwg==}
+  '@effect/schema@0.75.5':
+    resolution: {integrity: sha512-TQInulTVCuF+9EIbJpyLP6dvxbQJMphrnRqgexm/Ze39rSjfhJuufF7XvU3SxTgg3HnL7B/kpORTJbHhlE6thw==}
     peerDependencies:
-      effect: ^3.8.4
+      effect: ^3.9.2
 
-  '@effect/sql-mssql@0.14.0':
-    resolution: {integrity: sha512-Tuc4/0PGDsE7NKXHX2PHFs9Wy+yOTsKQymrFd756kULY6QN4lXZOVr63vxnuazT2JmpQ6zJ6EYtnDb1J/GHqrg==}
+  '@effect/sql-mssql@0.16.6':
+    resolution: {integrity: sha512-SRLEDDeBVLYTCS+m5xYtjJHmmCEqrwMAv++ZD3jbR5JKG3YcJJWp+G8TSXxqZ1eCdLtm8FoICOIOZlKbwkmuNQ==}
     peerDependencies:
-      '@effect/platform': ^0.66.2
-      '@effect/sql': ^0.14.0
-      effect: ^3.8.4
+      '@effect/platform': ^0.68.6
+      '@effect/sql': ^0.16.6
+      effect: ^3.9.2
 
-  '@effect/sql-mysql2@0.14.0':
-    resolution: {integrity: sha512-M9UOWyxBah7FvSgBZK+YXsPONtM7mxax1VwkzsNFH7c3QeKRmvOoS2ysXUKXsX9olL5R3P6gkV3ji2o8zCMs9w==}
+  '@effect/sql-mysql2@0.16.6':
+    resolution: {integrity: sha512-Tj4tKBJh5as/EDv/bhyYVQXbwUTzP/UkmBKyp+PeJCYluaEdkcGrydhru46D98ULd71TVquUHw9Z3zZPtiN73w==}
     peerDependencies:
-      '@effect/platform': ^0.66.2
-      '@effect/sql': ^0.14.0
-      effect: ^3.8.4
+      '@effect/platform': ^0.68.6
+      '@effect/sql': ^0.16.6
+      effect: ^3.9.2
 
-  '@effect/sql-pg@0.14.0':
-    resolution: {integrity: sha512-hYAo6NVIve+sjJWBJ2WqyRH8C1gScvlkuWRcj48MX+66CSfQD8qJBMyarqyum24Rptn/dwVoHlNv4eLNZ5U64A==}
+  '@effect/sql-pg@0.16.6':
+    resolution: {integrity: sha512-Dahkvyr4z+uw8I3FvNH0p0++72S4aE0Zri94ki627O9qBvVEs4rQxbcz9v3qy0Jg0xlDHD4VykTko23OB/e19A==}
     peerDependencies:
-      '@effect/platform': ^0.66.2
-      '@effect/sql': ^0.14.0
-      effect: ^3.8.4
+      '@effect/platform': ^0.68.6
+      '@effect/sql': ^0.16.6
+      effect: ^3.9.2
 
-  '@effect/sql@0.14.0':
-    resolution: {integrity: sha512-hV837PdMchhmLWcUjrNssYldfgLcz5mSu2wUzEs4YKgyUR6dyBNq5VLKw2pUGSpHRWYBW6tYflIKiDCMtrbCsQ==}
+  '@effect/sql@0.16.6':
+    resolution: {integrity: sha512-bwrDqppb0omTf4YDEMMzsDd6nbjTxIDm9iytmxv1251lyQ1/NoNE6uMvEHpiVsVYSQcdT7+5ie8ZhQForFO1UA==}
     peerDependencies:
-      '@effect/experimental': ^0.27.3
-      '@effect/platform': ^0.66.2
-      '@effect/schema': ^0.74.1
-      effect: ^3.8.4
+      '@effect/experimental': ^0.29.6
+      '@effect/platform': ^0.68.6
+      '@effect/schema': ^0.75.5
+      effect: ^3.9.2
 
-  '@effect/vitest@0.10.4':
-    resolution: {integrity: sha512-Ac2w4AR7aUJcf70yrdrupy6Y5KvIlFMDqQAJwqqv0vWgKcn1SXqsqMqHVU7Eursmo3/D6EfyLBgPr20s7UNkSw==}
+  '@effect/vitest@0.12.1':
+    resolution: {integrity: sha512-dUzg1CVgro8aeAVYeCEEMQlnx60CXxbztxH9KDG6/oLRZ/YixHWNytA9PGsC9UPYSgHAahjsn446HgQAnCpX4Q==}
     peerDependencies:
-      effect: ^3.8.4
+      effect: ^3.9.2
       vitest: ^2.0.5
 
   '@esbuild/aix-ppc64@0.21.5':
@@ -645,6 +645,11 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
+  acorn@8.13.0:
+    resolution: {integrity: sha512-8zSiw54Oxrdym50NlZ9sUusyO1Z1ZchgRLWRaK6c86XJFClyCgFKetdowBg5bKxyp/u+CDBJG4Mpp0m3HLZl9w==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
   agent-base@7.1.1:
     resolution: {integrity: sha512-H0TSyFNDMomMNJQBn8wFV5YC/2eJ+VXECwOadZJT554xP6cODZHPX3H9QMQECxvrgiSOP1pHjy1sMWQVYJOUOA==}
     engines: {node: '>= 14'}
@@ -790,8 +795,8 @@ packages:
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
-  effect@3.8.4:
-    resolution: {integrity: sha512-rOZ1XAi+Fb+fAHoUJ5FnJPSPZEBxVbCl5QWtOWFTgOeFHx0QpbK3pezWvq9OIxQPdwvSkPOw926qrs4xdD9dLA==}
+  effect@3.9.2:
+    resolution: {integrity: sha512-1sx/v1HTWHTodXfzWxAFg+SCF+ACgpJVruaAMIh/NmDVvrUsf0x9PzpXvkgJUbQ1fMdmKYK//FqxeHSQ+Zxv/Q==}
 
   end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
@@ -1652,64 +1657,64 @@ snapshots:
       jsonwebtoken: 9.0.2
       uuid: 8.3.2
 
-  '@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)':
+  '@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)':
     dependencies:
-      '@effect/platform': 0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
-      '@effect/schema': 0.74.1(effect@3.8.4)
-      effect: 3.8.4
+      '@effect/platform': 0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
+      '@effect/schema': 0.75.5(effect@3.9.2)
+      effect: 3.9.2
       msgpackr: 1.11.0
 
-  '@effect/language-service@0.1.0': {}
+  '@effect/language-service@0.2.0': {}
 
-  '@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)':
+  '@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)':
     dependencies:
-      '@effect/schema': 0.74.1(effect@3.8.4)
-      effect: 3.8.4
+      '@effect/schema': 0.75.5(effect@3.9.2)
+      effect: 3.9.2
       find-my-way-ts: 0.1.5
       multipasta: 0.2.5
 
-  '@effect/schema@0.74.1(effect@3.8.4)':
+  '@effect/schema@0.75.5(effect@3.9.2)':
     dependencies:
-      effect: 3.8.4
+      effect: 3.9.2
       fast-check: 3.22.0
 
-  '@effect/sql-mssql@0.14.0(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/sql@0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(effect@3.8.4)':
+  '@effect/sql-mssql@0.16.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/sql@0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(effect@3.9.2)':
     dependencies:
-      '@effect/platform': 0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
-      '@effect/sql': 0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
+      '@effect/platform': 0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
+      '@effect/sql': 0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
       '@opentelemetry/semantic-conventions': 1.27.0
-      effect: 3.8.4
+      effect: 3.9.2
       tedious: 18.6.1
     transitivePeerDependencies:
       - supports-color
 
-  '@effect/sql-mysql2@0.14.0(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/sql@0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(effect@3.8.4)':
+  '@effect/sql-mysql2@0.16.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/sql@0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(effect@3.9.2)':
     dependencies:
-      '@effect/platform': 0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
-      '@effect/sql': 0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
+      '@effect/platform': 0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
+      '@effect/sql': 0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
       '@opentelemetry/semantic-conventions': 1.27.0
-      effect: 3.8.4
+      effect: 3.9.2
       mysql2: 3.11.0
 
-  '@effect/sql-pg@0.14.0(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/sql@0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(effect@3.8.4)':
+  '@effect/sql-pg@0.16.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/sql@0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(effect@3.9.2)':
     dependencies:
-      '@effect/platform': 0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
-      '@effect/sql': 0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
+      '@effect/platform': 0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
+      '@effect/sql': 0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
       '@opentelemetry/semantic-conventions': 1.27.0
-      effect: 3.8.4
+      effect: 3.9.2
       postgres: 3.4.4
 
-  '@effect/sql@0.14.0(@effect/experimental@0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)':
+  '@effect/sql@0.16.6(@effect/experimental@0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)':
     dependencies:
-      '@effect/experimental': 0.23.6(@effect/platform@0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4))(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
-      '@effect/platform': 0.66.2(@effect/schema@0.74.1(effect@3.8.4))(effect@3.8.4)
-      '@effect/schema': 0.74.1(effect@3.8.4)
+      '@effect/experimental': 0.23.6(@effect/platform@0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2))(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
+      '@effect/platform': 0.68.6(@effect/schema@0.75.5(effect@3.9.2))(effect@3.9.2)
+      '@effect/schema': 0.75.5(effect@3.9.2)
       '@opentelemetry/semantic-conventions': 1.27.0
-      effect: 3.8.4
+      effect: 3.9.2
 
-  '@effect/vitest@0.10.4(effect@3.8.4)(vitest@2.1.1(@types/node@22.5.4)(terser@5.31.6))':
+  '@effect/vitest@0.12.1(effect@3.9.2)(vitest@2.1.1(@types/node@22.5.4)(terser@5.31.6))':
     dependencies:
-      effect: 3.8.4
+      effect: 3.9.2
       vitest: 2.1.1(@types/node@22.5.4)(terser@5.31.6)
 
   '@esbuild/aix-ppc64@0.21.5':
@@ -2079,6 +2084,9 @@ snapshots:
 
   acorn@8.12.1: {}
 
+  acorn@8.13.0:
+    optional: true
+
   agent-base@7.1.1:
     dependencies:
       debug: 4.3.7
@@ -2220,7 +2228,7 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  effect@3.8.4: {}
+  effect@3.9.2: {}
 
   end-of-stream@1.4.4:
     dependencies:
@@ -2865,7 +2873,7 @@ snapshots:
   terser@5.31.6:
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.12.1
+      acorn: 8.13.0
       commander: 2.20.3
       source-map-support: 0.5.21
     optional: true
