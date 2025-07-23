@@ -104,6 +104,8 @@ class MyDatabase extends Database.make<DatabaseSchema, MyDatabase>("MyDatabase")
 
 ### 3. Define Query Operations
 
+> These are kysely-enhanced versions of `@effect/sql`'s `Sql.SqlSchema.*`
+
 ```typescript
 import { Effect, Option } from "effect";
 
@@ -347,6 +349,8 @@ const deleteUser = MyDatabase.schema.void({
 ```
 
 ## Resolvers for Batched Queries
+
+> These are kysely-enhanced versions of `@effect/sql`'s `Sql.SqlResolver.*`
 
 Resolvers provide intelligent batching for N+1 query problems:
 
