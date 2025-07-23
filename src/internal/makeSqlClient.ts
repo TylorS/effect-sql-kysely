@@ -1,10 +1,10 @@
 import * as Sql from "@effect/sql";
 import type { SqlConnection } from "@effect/sql";
-import { type Primitive } from "@effect/sql/Statement";
+import type{ Primitive } from "@effect/sql/Statement";
 import { Chunk, Effect, Exit, Stream } from "effect";
 import { CompiledQuery, type Kysely } from "kysely";
 import { beginConnection } from "./beginConnection.js";
-import { createQueryId } from "./createQueryId.js";
+import { Reactivity } from "@effect/experimental";
 
 export function makeSqlClient<DB>({
   database,
@@ -16,7 +16,7 @@ export function makeSqlClient<DB>({
   compiler: Sql.Statement.Compiler;
   spanAttributes?: ReadonlyArray<readonly [string, string]>;
   chunkSize?: number;
-}): Sql.SqlClient.SqlClient {
+}): Effect.Effect<Sql.SqlClient.SqlClient> {
   const transformRows = Sql.Statement.defaultTransforms((s) => s, false).array;
 
   // A Connection is a wrapper around a Kysely database connection, or Transaction, that provides
@@ -80,7 +80,7 @@ export function makeSqlClient<DB>({
           Stream.fromAsyncIterable(
             this.db
               .getExecutor()
-              .stream(query, chunkSize, { queryId: createQueryId() }),
+              .stream(query, chunkSize),
             (cause) => new Sql.SqlError.SqlError({ cause })
           ),
           Chunk.flatMap((result) => Chunk.unsafeFromArray(result.rows))
@@ -114,7 +114,9 @@ export function makeSqlClient<DB>({
       ({ conn }) => new ConnectionImpl(conn)
     ),
     spanAttributes,
-  });
+  }).pipe(
+    Effect.provide(Reactivity.layer)
+  )
 }
 
 function compileSqlQuery(

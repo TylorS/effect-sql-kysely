@@ -12,7 +12,7 @@ This is especially important if you're utilizing 3rd-party libraries which wrap 
 ## Basic Usage
 
 ```ts
-// Integrates with Kysely's ColumnType + @effect/schema
+// Integrates with Kysely's ColumnType + Schema
 const Users = Table({
   id: Generated(Schema.Int),
   name: Schema.String,

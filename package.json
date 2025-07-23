@@ -26,27 +26,25 @@
   "license": "MIT",
   "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b",
   "devDependencies": {
-    "@effect/language-service": "^0.1.0",
-    "@effect/schema": "^0.74.0",
-    "@effect/sql": "^0.14.0",
-    "@effect/sql-mssql": "^0.14.0",
-    "@effect/sql-mysql2": "^0.14.0",
-    "@effect/sql-pg": "^0.14.0",
-    "@effect/vitest": "^0.10.0",
-    "@eslint/js": "^9.9.1",
-    "better-sqlite3": "^11.2.1",
-    "effect": "^3.6.7",
-    "eslint": "^9.9.1",
-    "globals": "^15.9.0",
-    "kysely": "^0.27.4",
-    "react": "^18.3.1",
-    "typescript": "^5.5.4",
-    "typescript-eslint": "^8.3.0",
-    "vitest": "^2.0.5"
+    "@effect/language-service": "^0.28.3",
+    "@effect/sql": "^0.44.0",
+    "@effect/sql-mssql": "^0.45.0",
+    "@effect/sql-mysql2": "^0.45.0",
+    "@effect/sql-pg": "^0.45.0",
+    "@effect/vitest": "^0.25.0",
+    "@eslint/js": "^9.31.0",
+    "better-sqlite3": "^12.2.0",
+    "effect": "^3.17.1",
+    "eslint": "^9.31.0",
+    "globals": "^16.3.0",
+    "kysely": "^0.28.3",
+    "react": "^19.1.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0",
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@effect/schema": "^0.69.2 || ^0.72.0 || ^0.74.0",
-    "@effect/sql": "^0.6.2 || ^0.10.0 || ^0.11.0 || ^0.14.0",
+    "@effect/sql": "^0.6.2",
     "effect": "^3.5.8",
     "kysely": "^0.27.4"
   },
@@ -63,6 +61,7 @@
     "./dist/*": "./dist/*.js"
   },
   "dependencies": {
-    "@effect/platform": "^0.66.0"
+    "@effect/experimental": "^0.54.0",
+    "@effect/platform": "^0.90.0"
   }
 }

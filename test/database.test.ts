@@ -2,7 +2,7 @@ import { describe, expect, it } from "@effect/vitest";
 import { Effect, Option } from "effect";
 import * as Database from "../src/Sqlite.js";
 import { Generated, Table } from "../src/Schema.js";
-import * as Schema from "@effect/schema/Schema";
+import * as Schema from "effect/Schema";
 import * as kysely from "kysely";
 import BetterSqlite3 from "better-sqlite3";
 
@@ -11,7 +11,7 @@ describe("database", () => {
     id: Generated(Schema.Int),
     name: Schema.String,
   }) { }
-  
+
   const TestSchema = Schema.Struct({
     users: Users,
   })
@@ -20,7 +20,7 @@ describe("database", () => {
 
   class TestDatabase extends Database.make<TestSchema, TestDatabase>(
     "TestDatabase"
-  ) {}
+  ) { }
 
   const acquire = Effect.promise(async () => {
     const db = new kysely.Kysely<TestSchema>({
@@ -41,7 +41,7 @@ describe("database", () => {
   });
 
   const createUser = TestDatabase.schema.single({
-    Request: Schema.String,
+    Request: Users.select.fields.name,
     Result: Users.select,
     execute: (db, name) =>
       db.insertInto("users").values({ name }).returningAll(),
@@ -55,7 +55,7 @@ describe("database", () => {
   });
 
   it.effect("should allow making SQL queries", () =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const created = yield* createUser("Test");
       const selected = yield* findUser(created.id);
 
@@ -64,7 +64,7 @@ describe("database", () => {
   );
 
   it.effect("should allow making SQL queries with transactions", () =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const created = yield* createUser("Test");
       const selected = yield* findUser(created.id);
 

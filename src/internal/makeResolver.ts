@@ -1,109 +1,60 @@
-import * as kysely from "kysely";
-import * as Context from "effect/Context";
+import type * as kysely from "kysely";
+import type * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Sql from "@effect/sql";
-import type { Schema } from "@effect/schema";
-import * as Option from "effect/Option";
+import type { Option } from "effect";
 import type { Types } from "effect";
 import type { KyselyDatabase } from "../Database.js";
+import type { Row } from "@effect/sql/SqlConnection";
 
 export function makeResolver<ID, DB>(Tag: Context.Tag<ID, KyselyDatabase<DB>>) {
-  const findById = <T extends string, I, II, RI, A, IA, Row extends object>(
+  const findById = <T extends string, I, II, RI, A, IA, Out extends Row, E, RA = never, R = never>(
     tag: T,
-    options: {
-      readonly Id: Schema.Schema<I, II, RI>;
-      readonly Result: Schema.Schema<A, IA, never>;
-      readonly ResultId: (
-        result: Types.NoInfer<A>,
-        row: Types.NoInfer<Row>
-      ) => II;
-      readonly execute: (
-        db: kysely.Kysely<DB>,
-        requests: Array<Types.NoInfer<II>>
-      ) => kysely.Compilable<Row>;
+    options: Omit<Parameters<typeof Sql.SqlResolver.findById<T, I, II, RI, A, IA, Out, E, RA, R>>[1], 'execute' | 'withContext'> & {
+      execute: (db: kysely.Kysely<DB>, requests: Array<Types.NoInfer<II>>) => kysely.Compilable<Out>
     }
-  ): Effect.Effect<
-    Sql.SqlResolver.SqlResolver<
-      T,
-      I,
-      Option.Option<A>,
-      Sql.SqlError.SqlError,
-      RI
-    >,
-    never,
-    ID
-  > =>
+  ): Effect.Effect<Sql.SqlResolver.SqlResolver<T, I, Option.Option<A>, Sql.SqlError.SqlError, RI>, never, ID | RA> =>
     Effect.flatMap(Tag, ({ kysely }) =>
       Sql.SqlResolver.findById(tag, {
         ...options,
-        execute: (requests) => kysely((db) => options.execute(db, requests)),
+        withContext: true,
+        execute: (requests) =>
+          kysely((db) => options.execute(db, requests)),
       })
     );
 
-  const grouped = <T extends string, I, II, K, RI, A, IA, Row extends object>(
+  const grouped = <T extends string, I, II, K, RI, A, IA, Out extends Row, E, RA = never, R = never>(
     tag: T,
-    options: {
-      readonly Request: Schema.Schema<I, II, RI>;
-      readonly RequestGroupKey: (request: Types.NoInfer<II>) => K;
-      readonly Result: Schema.Schema<A, IA, never>;
-      readonly ResultGroupKey: (
-        result: Types.NoInfer<A>,
-        row: Types.NoInfer<Row>
-      ) => K;
-      readonly execute: (
-        db: kysely.Kysely<DB>,
-        requests: Array<Types.NoInfer<II>>
-      ) => kysely.Compilable<Row>;
+    options: Omit<Parameters<typeof Sql.SqlResolver.grouped<T, I, II, K, RI, A, IA, Out, E, RA, R>>[1], 'execute' | 'withContext'> & {
+      execute: (db: kysely.Kysely<DB>, requests: Array<Types.NoInfer<II>>) => kysely.Compilable<Out>
     }
-  ): Effect.Effect<
-    Sql.SqlResolver.SqlResolver<T, I, Array<A>, Sql.SqlError.SqlError, RI>,
-    never,
-    ID
-  > =>
+  ): Effect.Effect<Sql.SqlResolver.SqlResolver<T, I, A[], Sql.SqlError.SqlError, RI>, never, ID | RA> =>
     Effect.flatMap(Tag, ({ kysely }) =>
       Sql.SqlResolver.grouped(tag, {
         ...options,
-        execute: (requests) =>
-          kysely<Row>((db) => options.execute(db, requests)),
-      })
-    );
-
-  const ordered = <T extends string, I, II, RI, A, IA extends object>(
-    tag: T,
-    options: {
-      readonly Request: Schema.Schema<I, II, RI>;
-      readonly Result: Schema.Schema<A, IA, never>;
-      readonly execute: (
-        db: kysely.Kysely<DB>,
-        requests: Array<Types.NoInfer<II>>
-      ) => kysely.Compilable<IA>;
-    }
-  ): Effect.Effect<
-    Sql.SqlResolver.SqlResolver<
-      T,
-      I,
-      A,
-      Sql.SqlError.ResultLengthMismatch | Sql.SqlError.SqlError,
-      RI
-    >,
-    never,
-    ID
-  > =>
-    Effect.flatMap(Tag, ({ kysely }) =>
-      Sql.SqlResolver.ordered(tag, {
-        ...options,
+        withContext: true,
         execute: (requests) => kysely((db) => options.execute(db, requests)),
       })
     );
 
-  const void_ = <T extends string, I, II, RI>(
+  const ordered = <T extends string, I, II, RI, A, IA, _, E, RA = never, R = never>(
     tag: T,
-    options: {
-      readonly Request: Schema.Schema<I, II, RI>;
-      readonly execute: (
-        db: kysely.Kysely<DB>,
-        requests: Array<Types.NoInfer<II>>
-      ) => kysely.Compilable<object>;
+    options: Omit<Parameters<typeof Sql.SqlResolver.ordered<T, I, II, RI, A, IA, _, E, RA, R>>[1], 'execute' | 'withContext'> & {
+      execute: (db: kysely.Kysely<DB>, requests: Array<Types.NoInfer<II>>) => kysely.Compilable<IA>
+    }
+  ): Effect.Effect<Sql.SqlResolver.SqlResolver<T, I, A, Sql.SqlError.SqlError | Sql.SqlError.ResultLengthMismatch, RI>, never, ID | RA> =>
+    Effect.flatMap(Tag, ({ kysely }) =>
+      Sql.SqlResolver.ordered(tag, {
+        ...options,
+        withContext: true,
+        execute: (requests) => kysely((db) => options.execute(db, requests)),
+      })
+    );
+
+  const void_ = <T extends string, I, II, RI, E, R = never>(
+    tag: T,
+    options: Omit<Parameters<typeof Sql.SqlResolver.void<T, I, II, RI, E, R>>[1], 'execute' | 'withContext'> & {
+      execute: (db: kysely.Kysely<DB>, requests: Array<Types.NoInfer<II>>) => kysely.Compilable<object>
     }
   ): Effect.Effect<
     Sql.SqlResolver.SqlResolver<T, I, void, Sql.SqlError.SqlError, RI>,
