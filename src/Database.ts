@@ -9,6 +9,7 @@ import { makeSqlClient } from "./internal/makeSqlClient.js";
 import { makeResolver } from "./internal/makeResolver.js";
 import { makeSchema } from "./internal/makeSchema.js";
 import type { Row } from "@effect/sql/SqlConnection";
+import { Reactivity } from "@effect/experimental";
 
 export interface KyselyDatabase<DB> {
   readonly sql: Sql.SqlClient.SqlClient;
@@ -39,6 +40,8 @@ export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> => {
 
       return { sql, db, kysely }
     })
+  ).pipe(
+    Layer.provide(Reactivity.layer)
   )
 
   return Object.assign(Tag, {

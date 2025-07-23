@@ -16,7 +16,7 @@ export function makeSqlClient<DB>({
   compiler: Sql.Statement.Compiler;
   spanAttributes?: ReadonlyArray<readonly [string, string]>;
   chunkSize?: number;
-}): Effect.Effect<Sql.SqlClient.SqlClient> {
+}): Effect.Effect<Sql.SqlClient.SqlClient, never, Reactivity.Reactivity> {
   const transformRows = Sql.Statement.defaultTransforms((s) => s, false).array;
 
   // A Connection is a wrapper around a Kysely database connection, or Transaction, that provides
@@ -114,9 +114,7 @@ export function makeSqlClient<DB>({
       ({ conn }) => new ConnectionImpl(conn)
     ),
     spanAttributes,
-  }).pipe(
-    Effect.provide(Reactivity.layer)
-  )
+  })
 }
 
 function compileSqlQuery(
