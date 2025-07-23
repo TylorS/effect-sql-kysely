@@ -44,14 +44,14 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@effect/sql": "^0.6.2",
-    "effect": "^3.5.8",
-    "kysely": "^0.27.4"
+    "@effect/sql": "^0.44.0",
+    "effect": "^3.17.1",
+    "kysely": "^0.28.3"
   },
   "optionalPeerDependencies": {
-    "@effect/sql-mssql": "^0.3.19",
-    "@effect/sql-mysql2": "^0.3.19",
-    "@effect/sql-pg": "^0.3.19"
+    "@effect/sql-mssql": "^0.45.0",
+    "@effect/sql-mysql2": "^0.45.0",
+    "@effect/sql-pg": "^0.45.0"
   },
   "exports": {
     ".": {
