@@ -4,6 +4,8 @@ A full-featured integration between `@effect/sql` and `Kysely` that provides typ
 
 `effect-sql-kysely` implements the [`SqlClient`](https://effect-ts.github.io/effect/sql/SqlClient.ts.html#sqlclient-interface) interface directly, meaning Kysely manages database connections, transactions, and query compilation while Effect handles the execution context, error handling, and resource lifecycle.
 
+Given we just implement `SqlClient` atop of `Kysely` any and all 3rd-party tooling for Kysely or `@effect/sql` are 100% compatible.
+
 ## Features
 
 - **Type-safe database operations** with Kysely's query builder
