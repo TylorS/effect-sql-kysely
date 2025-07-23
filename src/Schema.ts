@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Schema } from "@effect/schema";
+import * as Schema from "effect/Schema";
 import { hasProperty } from "effect/Predicate";
 import * as Record from "effect/Record";
-import * as kysely from "kysely";
+import type * as kysely from "kysely";
 
 export const ColumnTypesId = Symbol.for("effect-sql-kysely/ColumnTypesId");
 export type ColumnTypesId = typeof ColumnTypesId;

@@ -1,4 +1,4 @@
-import { Kysely } from "kysely";
+import type { Kysely } from "kysely";
 import { DeferredPromise } from "./DeferredPromise.js";
 
 export async function beginConnection<DB>(db: Kysely<DB>) {
