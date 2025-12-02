@@ -9,30 +9,30 @@ importers:
   .:
     dependencies:
       '@effect/experimental':
-        specifier: ^0.54.0
-        version: 0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
+        specifier: ^0.57.0
+        version: 0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
       '@effect/platform':
-        specifier: ^0.90.0
-        version: 0.90.0(effect@3.17.1)
+        specifier: ^0.93.0
+        version: 0.93.6(effect@3.19.8)
     devDependencies:
       '@effect/language-service':
-        specifier: ^0.28.3
-        version: 0.28.3
+        specifier: ^0.58.0
+        version: 0.58.3
       '@effect/sql':
-        specifier: ^0.44.0
-        version: 0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
+        specifier: ^0.48.0
+        version: 0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
       '@effect/sql-mssql':
-        specifier: ^0.45.0
-        version: 0.45.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(@effect/sql@0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(effect@3.17.1)
+        specifier: ^0.49.0
+        version: 0.49.0(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(@effect/sql@0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(effect@3.19.8)
       '@effect/sql-mysql2':
-        specifier: ^0.45.0
-        version: 0.45.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(@effect/sql@0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(effect@3.17.1)
+        specifier: ^0.49.0
+        version: 0.49.1(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(@effect/sql@0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(effect@3.19.8)
       '@effect/sql-pg':
-        specifier: ^0.45.0
-        version: 0.45.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(@effect/sql@0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(effect@3.17.1)
+        specifier: ^0.49.0
+        version: 0.49.7(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(@effect/sql@0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(effect@3.19.8)
       '@effect/vitest':
-        specifier: ^0.25.0
-        version: 0.25.0(effect@3.17.1)(vitest@3.2.4(@types/node@24.1.0)(terser@5.43.1))
+        specifier: ^0.27.0
+        version: 0.27.0(effect@3.19.8)(vitest@3.2.4(@types/node@24.1.0)(terser@5.43.1))
       '@eslint/js':
         specifier: ^9.31.0
         version: 9.31.0
@@ -41,7 +41,7 @@ importers:
         version: 12.2.0
       effect:
         specifier: ^3.17.1
-        version: 3.17.1
+        version: 3.19.8
       eslint:
         specifier: ^9.31.0
         version: 9.31.0
@@ -50,7 +50,7 @@ importers:
         version: 16.3.0
       kysely:
         specifier: ^0.28.3
-        version: 0.28.3
+        version: 0.28.8
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -134,11 +134,11 @@ packages:
     resolution: {integrity: sha512-95wjsKGyUcAd5tFmQBo5Ug/kOj+hFh/8FsXuxluEvdfbgg6xCimhSP9qnyq6+xIg78/jREkBD1/BSqd7NIDDYQ==}
     engines: {node: '>=16'}
 
-  '@effect/experimental@0.54.0':
-    resolution: {integrity: sha512-9XkKzfHpcGSLCVKGqC6lHNG/O1seBHNWtOW6bssJbYw8slvZ7giPNyW+iQHL2GhWsSDPFANvIu9K32iBdE7AGA==}
+  '@effect/experimental@0.57.10':
+    resolution: {integrity: sha512-Susfz1Fvmb6EgwZLtB0clHyhVIiHsGxQnrys/7y66aGQwv5nvf61VVR+WV5oKriSxYQtPKKQWl8tZTptLm8GWQ==}
     peerDependencies:
-      '@effect/platform': ^0.90.0
-      effect: ^3.17.0
+      '@effect/platform': ^0.93.6
+      effect: ^3.19.8
       ioredis: ^5
       lmdb: ^3
     peerDependenciesMeta:
@@ -147,50 +147,50 @@ packages:
       lmdb:
         optional: true
 
-  '@effect/language-service@0.28.3':
-    resolution: {integrity: sha512-C7feKBiRkvH7zy9mO67P1lRkdI/brXdv9FF0Jc0JYz7q/Sytgz2c1aqelid9fodh0ee+PTO5bd3OaCpIDu/7qA==}
+  '@effect/language-service@0.58.3':
+    resolution: {integrity: sha512-w0Evs6gKo+3dmufuoL5feK+IsKmkwoIWfQCoQRv/+FJK0Dg42sQ/xJw/kOCEorP7M+XgV0HPJ3boB7kDTA3Zgw==}
     hasBin: true
 
-  '@effect/platform@0.90.0':
-    resolution: {integrity: sha512-F26RZO8qVyCLH43EF9BvJwrhtFsZL2Xv66Jxxjj/sBIes8TOVpyebaysQ7Tz33xALobwU1eNgm8vh18VkJiWnQ==}
+  '@effect/platform@0.93.6':
+    resolution: {integrity: sha512-I5lBGQWzWXP4zlIdPs7z7WHmEFVBQhn+74emr/h16GZX96EEJ6I1rjGaKyZF7mtukbMuo9wEckDPssM8vskZ/w==}
     peerDependencies:
-      effect: ^3.17.0
+      effect: ^3.19.8
 
-  '@effect/sql-mssql@0.45.0':
-    resolution: {integrity: sha512-bCh4mzcSVc3zRcHFtQu2cgjtyC6oq0MbxAy8kLnpTOnXcuVrxNQl5vjZP3u4lGzKzYuVdkrAwhAtf47UcdkScg==}
+  '@effect/sql-mssql@0.49.0':
+    resolution: {integrity: sha512-9b6uqdwIEqkRYq4bt8OFrBkKcJRDSNrfI5TCbL9nJKz62Qhkxwh8BjozdA2HAu93Wna4U/Nhfz/eReqF0R/HKg==}
     peerDependencies:
-      '@effect/experimental': ^0.54.0
-      '@effect/platform': ^0.90.0
-      '@effect/sql': ^0.44.0
-      effect: ^3.17.0
+      '@effect/experimental': ^0.57.0
+      '@effect/platform': ^0.93.0
+      '@effect/sql': ^0.48.0
+      effect: ^3.19.0
 
-  '@effect/sql-mysql2@0.45.0':
-    resolution: {integrity: sha512-JwsJYiK6f7iqSSVw6nz0TSgA/5PmKNzMeDlG3lUt7RQfg+LmxSbbE41bNaTnv8F4KdQjE9f0v4VVGeYJI7jPVw==}
+  '@effect/sql-mysql2@0.49.1':
+    resolution: {integrity: sha512-zJ6Zq6RmyFsmeRk31RmPTBH+VKPgsWkTdtRLdZSu1876tNJJCPfp6cw3ds9pLa8CZ09AL/JguR1NNaVjM1V/RA==}
     peerDependencies:
-      '@effect/experimental': ^0.54.0
-      '@effect/platform': ^0.90.0
-      '@effect/sql': ^0.44.0
-      effect: ^3.17.0
+      '@effect/experimental': ^0.57.5
+      '@effect/platform': ^0.93.4
+      '@effect/sql': ^0.48.1
+      effect: ^3.19.6
 
-  '@effect/sql-pg@0.45.0':
-    resolution: {integrity: sha512-zDBY5be4IiPWE0e+wC16QY3RO0mFxNkSRWD8Zb7bATlLICkZzgBTZjRRbpp9UUpSiHD/5gWM9pzTwB33RT78fQ==}
+  '@effect/sql-pg@0.49.7':
+    resolution: {integrity: sha512-7yGHEcSTj3jo7EZxC4cEXUno+/pgbEjjY5WLrx0Nfta07Vu6CTplcSOQ5KA24HwkclBidNwfX7LWghc04kAgUQ==}
     peerDependencies:
-      '@effect/experimental': ^0.54.0
-      '@effect/platform': ^0.90.0
-      '@effect/sql': ^0.44.0
-      effect: ^3.17.0
+      '@effect/experimental': ^0.57.5
+      '@effect/platform': ^0.93.4
+      '@effect/sql': ^0.48.1
+      effect: ^3.19.6
 
-  '@effect/sql@0.44.0':
-    resolution: {integrity: sha512-HxVEk9ufZZnJ2AuqUlgirjlSDYQ49QDM6o7MkcFQtp4UKrCmDgTshNre11rACOiMZH3ywH6cWViJ1eLwf10D2A==}
+  '@effect/sql@0.48.6':
+    resolution: {integrity: sha512-OBIG/DYFxYTA9EXXhqi6sAcX0YLz8Huu8L+wj3a0aOSRPpHm9HkL9a5lacRPPvrVl31rKcEteGa/lO6n26gIFg==}
     peerDependencies:
-      '@effect/experimental': ^0.54.0
-      '@effect/platform': ^0.90.0
-      effect: ^3.17.0
+      '@effect/experimental': ^0.57.9
+      '@effect/platform': ^0.93.6
+      effect: ^3.19.8
 
-  '@effect/vitest@0.25.0':
-    resolution: {integrity: sha512-FpOKYdhe3LaOoYn0cm5W9cD9bk2qwr2A+ujMhiDVxN7MMgndFsOd8uxcWjZRX6tWjzU2aKvZXFKGEp93GAmXug==}
+  '@effect/vitest@0.27.0':
+    resolution: {integrity: sha512-8bM7n9xlMUYw9GqPIVgXFwFm2jf27m/R7psI64PGpwU5+26iwyxp9eAXEsfT5S6lqztYfpQQ1Ubp5o6HfNYzJQ==}
     peerDependencies:
-      effect: ^3.17.0
+      effect: ^3.19.0
       vitest: ^3.2.0
 
   '@esbuild/aix-ppc64@0.25.8':
@@ -407,21 +407,24 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@jridgewell/gen-mapping@0.3.12':
-    resolution: {integrity: sha512-OuLGC46TjB5BbN1dH8JULVVZY4WTdkF7tV9Ys6wLL1rubZnCMstOhNHueU5bLCrnRuDhKPDM4g6sw4Bel5Gzqg==}
+  '@jridgewell/gen-mapping@0.3.13':
+    resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
 
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
     engines: {node: '>=6.0.0'}
 
-  '@jridgewell/source-map@0.3.10':
-    resolution: {integrity: sha512-0pPkgz9dY+bijgistcTTJ5mR+ocqRXLuhXHYdzoMmmoJ2C9S46RCm2GMUbatPEUK9Yjy26IrAy8D/M00lLkv+Q==}
+  '@jridgewell/source-map@0.3.11':
+    resolution: {integrity: sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA==}
 
   '@jridgewell/sourcemap-codec@1.5.4':
     resolution: {integrity: sha512-VT2+G1VQs/9oz078bLrYbecdZKs912zQlkelYpuf+SXF+QvZDYJlbx/LSx+meSAwdDFnF8FVXW92AVjjkVmgFw==}
 
-  '@jridgewell/trace-mapping@0.3.29':
-    resolution: {integrity: sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ==}
+  '@jridgewell/sourcemap-codec@1.5.5':
+    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
+
+  '@jridgewell/trace-mapping@0.3.31':
+    resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
   '@js-joda/core@5.6.5':
     resolution: {integrity: sha512-3zwefSMwHpu8iVUW8YYz227sIv6UFqO31p1Bf1ZH/Vom7CmNyUsXjDBlnNzcuhmOL1XfxZ3nvND42kR23XlbcQ==}
@@ -467,10 +470,6 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
-
-  '@opentelemetry/semantic-conventions@1.36.0':
-    resolution: {integrity: sha512-TtxJSRD8Ohxp6bKkhrm27JRHAxPczQA7idtcTOMYI+wQRRrfgqxHv1cFbCApcSnNjtXkmzFozn6jQtFrOmbjPQ==}
-    engines: {node: '>=14'}
 
   '@rollup/rollup-android-arm-eabi@4.45.1':
     resolution: {integrity: sha512-NEySIFvMY0ZQO+utJkgoMiCAjMrGvnbDLHvcmlA33UXJpYBCvlBEbMMtV837uCkS+plG2umfhn0T5mMAxGrlRA==}
@@ -853,8 +852,8 @@ packages:
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
-  effect@3.17.1:
-    resolution: {integrity: sha512-t917ks10FGNf7MpwOxHUg6vo42p0XsdMHuBMVpy4NttPu5gIv8/ah5MgbHLVQJ2kmDvZfQUT1/xyCa1IR09u2Q==}
+  effect@3.19.8:
+    resolution: {integrity: sha512-OmLw8EfH02vdmyU2fO4uY9He/wepwKI5E/JNpE2pseaWWUbaYOK9UlxIiKP20ZEqQr+S/jSqRDGmpiqD/2DeCQ==}
 
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
@@ -1123,8 +1122,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  kysely@0.28.3:
-    resolution: {integrity: sha512-svKnkSH72APRdjfVCCOknxaC9Eb3nA2StHG9d5/sKOqRvHRp2Dtf1XwDvc92b4B5v6LV+EAGWXQbZ5jMOvHaDw==}
+  kysely@0.28.8:
+    resolution: {integrity: sha512-QUOgl5ZrS9IRuhq5FvOKFSsD/3+IA6MLE81/bOOTRA/YQpKDza2sFdN5g6JCB9BOpqMJDGefLCQ9F12hRS13TA==}
     engines: {node: '>=20.0.0'}
 
   levn@0.4.1:
@@ -1244,6 +1243,9 @@ packages:
     resolution: {integrity: sha512-s+w+rBWnpTMwSFbaE0UXsRlg7hU4FjekKU4eyAih5T8nJuNZT1nNsskXpxmeqSK9UzkBl6UgRlnKc8hz8IEqOw==}
     hasBin: true
 
+  obuf@1.1.2:
+    resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
+
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
@@ -1282,6 +1284,53 @@ packages:
     resolution: {integrity: sha512-//nshmD55c46FuFw26xV/xFAaB5HF9Xdap7HJBBnrKdAd6/GxDBaNA1870O79+9ueg61cZLSVc+OaFlfmObYVQ==}
     engines: {node: '>= 14.16'}
 
+  pg-cloudflare@1.2.7:
+    resolution: {integrity: sha512-YgCtzMH0ptvZJslLM1ffsY4EuGaU0cx4XSdXLRFae8bPP4dS5xL1tNB3k2o/N64cHJpwU7dxKli/nZ2lUa5fLg==}
+
+  pg-connection-string@2.9.1:
+    resolution: {integrity: sha512-nkc6NpDcvPVpZXxrreI/FOtX3XemeLl8E0qFr6F2Lrm/I8WOnaWNhIPK2Z7OHpw7gh5XJThi6j6ppgNoaT1w4w==}
+
+  pg-cursor@2.15.3:
+    resolution: {integrity: sha512-eHw63TsiGtFEfAd7tOTZ+TLy+i/2ePKS20H84qCQ+aQ60pve05Okon9tKMC+YN3j6XyeFoHnaim7Lt9WVafQsA==}
+    peerDependencies:
+      pg: ^8
+
+  pg-int8@1.0.1:
+    resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
+    engines: {node: '>=4.0.0'}
+
+  pg-numeric@1.0.2:
+    resolution: {integrity: sha512-BM/Thnrw5jm2kKLE5uJkXqqExRUY/toLHda65XgFTBTFYZyopbKjBe29Ii3RbkvlsMoFwD+tHeGaCjjv0gHlyw==}
+    engines: {node: '>=4'}
+
+  pg-pool@3.10.1:
+    resolution: {integrity: sha512-Tu8jMlcX+9d8+QVzKIvM/uJtp07PKr82IUOYEphaWcoBhIYkoHpLXN3qO59nAI11ripznDsEzEv8nUxBVWajGg==}
+    peerDependencies:
+      pg: '>=8.0'
+
+  pg-protocol@1.10.3:
+    resolution: {integrity: sha512-6DIBgBQaTKDJyxnXaLiLR8wBpQQcGWuAESkRBX/t6OwA8YsqP+iVSiond2EDy6Y/dsGk8rh/jtax3js5NeV7JQ==}
+
+  pg-types@2.2.0:
+    resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
+    engines: {node: '>=4'}
+
+  pg-types@4.1.0:
+    resolution: {integrity: sha512-o2XFanIMy/3+mThw69O8d4n1E5zsLhdO+OPqswezu7Z5ekP4hYDqlDjlmOpYMbzY2Br0ufCwJLdDIXeNVwcWFg==}
+    engines: {node: '>=10'}
+
+  pg@8.16.3:
+    resolution: {integrity: sha512-enxc1h0jA/aq5oSDMvqyW3q89ra6XIIDZgCX9vkMrnz5DFTw/Ny3Li2lFQ+pt3L6MCgm/5o2o8HW9hiJji+xvw==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      pg-native: '>=3.0.1'
+    peerDependenciesMeta:
+      pg-native:
+        optional: true
+
+  pgpass@1.0.5:
+    resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -1297,9 +1346,40 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postgres@3.4.7:
-    resolution: {integrity: sha512-Jtc2612XINuBjIl/QTWsV5UvE8UHuNblcO3vVADSrKsrc6RqGX6lOW1cEo3CM2v0XG4Nat8nI+YM7/f26VxXLw==}
+  postgres-array@2.0.0:
+    resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
+    engines: {node: '>=4'}
+
+  postgres-array@3.0.4:
+    resolution: {integrity: sha512-nAUSGfSDGOaOAEGwqsRY27GPOea7CNipJPOA7lPbdEpx5Kg3qzdP0AaWC5MlhTWV9s4hFX39nomVZ+C4tnGOJQ==}
     engines: {node: '>=12'}
+
+  postgres-bytea@1.0.0:
+    resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
+    engines: {node: '>=0.10.0'}
+
+  postgres-bytea@3.0.0:
+    resolution: {integrity: sha512-CNd4jim9RFPkObHSjVHlVrxoVQXz7quwNFpz7RY1okNNme49+sVyiTvTRobiLV548Hx/hb1BG+iE7h9493WzFw==}
+    engines: {node: '>= 6'}
+
+  postgres-date@1.0.7:
+    resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
+    engines: {node: '>=0.10.0'}
+
+  postgres-date@2.1.0:
+    resolution: {integrity: sha512-K7Juri8gtgXVcDfZttFKVmhglp7epKb1K4pgrkLxehjqkrgPhfG6OO8LHLkfaqkbpjNRnra018XwAr1yQFWGcA==}
+    engines: {node: '>=12'}
+
+  postgres-interval@1.2.0:
+    resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
+    engines: {node: '>=0.10.0'}
+
+  postgres-interval@3.0.0:
+    resolution: {integrity: sha512-BSNDnbyZCXSxgA+1f5UU2GmwhoI0aU5yMxRGO8CdFEcY2BQF9xm/7MqKnYoM1nJDk8nONNWDk9WeSmePFhQdlw==}
+    engines: {node: '>=12'}
+
+  postgres-range@1.1.4:
+    resolution: {integrity: sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==}
 
   prebuild-install@7.1.3:
     resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
@@ -1404,6 +1484,10 @@ packages:
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+
+  split2@4.2.0:
+    resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
+    engines: {node: '>= 10.x'}
 
   sprintf-js@1.1.3:
     resolution: {integrity: sha512-Oo+0REFV59/rz3gfJNKQiBlwfHaSESl1pcGyABQsnnIfWOFt6JNj5gCog2U6MLZ//IGYD+nA8nI+mTShREReaA==}
@@ -1617,6 +1701,10 @@ packages:
     resolution: {integrity: sha512-h3Fbisa2nKGPxCpm89Hk33lBLsnaGBvctQopaBSOW/uIs6FTe1ATyAnKFJrzVs9vpGdsTe73WF3V4lIsk4Gacw==}
     engines: {node: '>=18'}
 
+  xtend@4.0.2:
+    resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
+    engines: {node: '>=0.4'}
+
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
@@ -1768,62 +1856,63 @@ snapshots:
       jsonwebtoken: 9.0.2
       uuid: 8.3.2
 
-  '@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)':
+  '@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)':
     dependencies:
-      '@effect/platform': 0.90.0(effect@3.17.1)
-      effect: 3.17.1
+      '@effect/platform': 0.93.6(effect@3.19.8)
+      effect: 3.19.8
       uuid: 11.1.0
 
-  '@effect/language-service@0.28.3': {}
+  '@effect/language-service@0.58.3': {}
 
-  '@effect/platform@0.90.0(effect@3.17.1)':
+  '@effect/platform@0.93.6(effect@3.19.8)':
     dependencies:
-      '@opentelemetry/semantic-conventions': 1.36.0
-      effect: 3.17.1
+      effect: 3.19.8
       find-my-way-ts: 0.1.6
       msgpackr: 1.11.5
       multipasta: 0.2.7
 
-  '@effect/sql-mssql@0.45.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(@effect/sql@0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(effect@3.17.1)':
+  '@effect/sql-mssql@0.49.0(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(@effect/sql@0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(effect@3.19.8)':
     dependencies:
-      '@effect/experimental': 0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
-      '@effect/platform': 0.90.0(effect@3.17.1)
-      '@effect/sql': 0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
-      '@opentelemetry/semantic-conventions': 1.36.0
-      effect: 3.17.1
+      '@effect/experimental': 0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
+      '@effect/platform': 0.93.6(effect@3.19.8)
+      '@effect/sql': 0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
+      effect: 3.19.8
       tedious: 18.6.1
     transitivePeerDependencies:
       - supports-color
 
-  '@effect/sql-mysql2@0.45.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(@effect/sql@0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(effect@3.17.1)':
+  '@effect/sql-mysql2@0.49.1(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(@effect/sql@0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(effect@3.19.8)':
     dependencies:
-      '@effect/experimental': 0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
-      '@effect/platform': 0.90.0(effect@3.17.1)
-      '@effect/sql': 0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
-      '@opentelemetry/semantic-conventions': 1.36.0
-      effect: 3.17.1
+      '@effect/experimental': 0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
+      '@effect/platform': 0.93.6(effect@3.19.8)
+      '@effect/sql': 0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
+      effect: 3.19.8
       mysql2: 3.14.2
 
-  '@effect/sql-pg@0.45.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(@effect/sql@0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(effect@3.17.1)':
+  '@effect/sql-pg@0.49.7(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(@effect/sql@0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(effect@3.19.8)':
     dependencies:
-      '@effect/experimental': 0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
-      '@effect/platform': 0.90.0(effect@3.17.1)
-      '@effect/sql': 0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
-      '@opentelemetry/semantic-conventions': 1.36.0
-      effect: 3.17.1
-      postgres: 3.4.7
+      '@effect/experimental': 0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
+      '@effect/platform': 0.93.6(effect@3.19.8)
+      '@effect/sql': 0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
+      effect: 3.19.8
+      pg: 8.16.3
+      pg-connection-string: 2.9.1
+      pg-cursor: 2.15.3(pg@8.16.3)
+      pg-pool: 3.10.1(pg@8.16.3)
+      pg-types: 4.1.0
+    transitivePeerDependencies:
+      - pg-native
 
-  '@effect/sql@0.44.0(@effect/experimental@0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1))(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)':
+  '@effect/sql@0.48.6(@effect/experimental@0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8))(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)':
     dependencies:
-      '@effect/experimental': 0.54.0(@effect/platform@0.90.0(effect@3.17.1))(effect@3.17.1)
-      '@effect/platform': 0.90.0(effect@3.17.1)
-      '@opentelemetry/semantic-conventions': 1.36.0
-      effect: 3.17.1
+      '@effect/experimental': 0.57.10(@effect/platform@0.93.6(effect@3.19.8))(effect@3.19.8)
+      '@effect/platform': 0.93.6(effect@3.19.8)
+      effect: 3.19.8
       uuid: 11.1.0
 
-  '@effect/vitest@0.25.0(effect@3.17.1)(vitest@3.2.4(@types/node@24.1.0)(terser@5.43.1))':
+  '@effect/vitest@0.27.0(effect@3.19.8)(vitest@3.2.4(@types/node@24.1.0)(terser@5.43.1))':
     dependencies:
-      effect: 3.17.1
+      effect: 3.19.8
       vitest: 3.2.4(@types/node@24.1.0)(terser@5.43.1)
 
   '@esbuild/aix-ppc64@0.25.8':
@@ -1961,27 +2050,30 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@jridgewell/gen-mapping@0.3.12':
+  '@jridgewell/gen-mapping@0.3.13':
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.4
-      '@jridgewell/trace-mapping': 0.3.29
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/trace-mapping': 0.3.31
     optional: true
 
   '@jridgewell/resolve-uri@3.1.2':
     optional: true
 
-  '@jridgewell/source-map@0.3.10':
+  '@jridgewell/source-map@0.3.11':
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.12
-      '@jridgewell/trace-mapping': 0.3.29
+      '@jridgewell/gen-mapping': 0.3.13
+      '@jridgewell/trace-mapping': 0.3.31
     optional: true
 
   '@jridgewell/sourcemap-codec@1.5.4': {}
 
-  '@jridgewell/trace-mapping@0.3.29':
+  '@jridgewell/sourcemap-codec@1.5.5':
+    optional: true
+
+  '@jridgewell/trace-mapping@0.3.31':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.4
+      '@jridgewell/sourcemap-codec': 1.5.5
     optional: true
 
   '@js-joda/core@5.6.5': {}
@@ -2015,8 +2107,6 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
-
-  '@opentelemetry/semantic-conventions@1.36.0': {}
 
   '@rollup/rollup-android-arm-eabi@4.45.1':
     optional: true
@@ -2397,7 +2487,7 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  effect@3.17.1:
+  effect@3.19.8:
     dependencies:
       '@standard-schema/spec': 1.0.0
       fast-check: 3.23.2
@@ -2694,7 +2784,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  kysely@0.28.3: {}
+  kysely@0.28.8: {}
 
   levn@0.4.1:
     dependencies:
@@ -2807,6 +2897,8 @@ snapshots:
       detect-libc: 2.0.4
     optional: true
 
+  obuf@1.1.2: {}
+
   once@1.4.0:
     dependencies:
       wrappy: 1.0.2
@@ -2847,6 +2939,57 @@ snapshots:
 
   pathval@2.0.1: {}
 
+  pg-cloudflare@1.2.7:
+    optional: true
+
+  pg-connection-string@2.9.1: {}
+
+  pg-cursor@2.15.3(pg@8.16.3):
+    dependencies:
+      pg: 8.16.3
+
+  pg-int8@1.0.1: {}
+
+  pg-numeric@1.0.2: {}
+
+  pg-pool@3.10.1(pg@8.16.3):
+    dependencies:
+      pg: 8.16.3
+
+  pg-protocol@1.10.3: {}
+
+  pg-types@2.2.0:
+    dependencies:
+      pg-int8: 1.0.1
+      postgres-array: 2.0.0
+      postgres-bytea: 1.0.0
+      postgres-date: 1.0.7
+      postgres-interval: 1.2.0
+
+  pg-types@4.1.0:
+    dependencies:
+      pg-int8: 1.0.1
+      pg-numeric: 1.0.2
+      postgres-array: 3.0.4
+      postgres-bytea: 3.0.0
+      postgres-date: 2.1.0
+      postgres-interval: 3.0.0
+      postgres-range: 1.1.4
+
+  pg@8.16.3:
+    dependencies:
+      pg-connection-string: 2.9.1
+      pg-pool: 3.10.1(pg@8.16.3)
+      pg-protocol: 1.10.3
+      pg-types: 2.2.0
+      pgpass: 1.0.5
+    optionalDependencies:
+      pg-cloudflare: 1.2.7
+
+  pgpass@1.0.5:
+    dependencies:
+      split2: 4.2.0
+
   picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
@@ -2859,7 +3002,27 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postgres@3.4.7: {}
+  postgres-array@2.0.0: {}
+
+  postgres-array@3.0.4: {}
+
+  postgres-bytea@1.0.0: {}
+
+  postgres-bytea@3.0.0:
+    dependencies:
+      obuf: 1.1.2
+
+  postgres-date@1.0.7: {}
+
+  postgres-date@2.1.0: {}
+
+  postgres-interval@1.2.0:
+    dependencies:
+      xtend: 4.0.2
+
+  postgres-interval@3.0.0: {}
+
+  postgres-range@1.1.4: {}
 
   prebuild-install@7.1.3:
     dependencies:
@@ -2985,6 +3148,8 @@ snapshots:
   source-map@0.6.1:
     optional: true
 
+  split2@4.2.0: {}
+
   sprintf-js@1.1.3: {}
 
   sqlstring@2.3.3: {}
@@ -3041,7 +3206,7 @@ snapshots:
 
   terser@5.43.1:
     dependencies:
-      '@jridgewell/source-map': 0.3.10
+      '@jridgewell/source-map': 0.3.11
       acorn: 8.15.0
       commander: 2.20.3
       source-map-support: 0.5.21
@@ -3196,5 +3361,7 @@ snapshots:
   wsl-utils@0.1.0:
     dependencies:
       is-wsl: 3.1.0
+
+  xtend@4.0.2: {}
 
   yocto-queue@0.1.0: {}
