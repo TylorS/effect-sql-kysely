@@ -111,13 +111,10 @@ import { Effect, Option } from "effect";
 
 // Create a user
 const createUser = MyDatabase.schema.single({
-  Request: Schema.Struct({
-    name: Schema.String,
-    email: Schema.String,
-  }),
+  Request: Users.insert,
   Result: Users.select,
-  execute: (db, { name, email }) =>
-    db.insertInto("users").values({ name, email }).returningAll(),
+  execute: (db, insert) =>
+    db.insertInto("users").values(insert).returningAll(),
 });
 
 // Find user by ID
@@ -138,12 +135,9 @@ const findPostsByAuthor = MyDatabase.schema.select({
 
 // Update user
 const updateUser = MyDatabase.schema.void({
-  Request: Schema.Struct({
-    id: Schema.Int,
-    name: Schema.String,
-  }),
-  execute: (db, { id, name }) =>
-    db.updateTable("users").set({ name }).where("id", "=", id),
+  Request: Users.update,
+  execute: (db, { id, ...update }) =>
+    db.updateTable("users").set(update).where("id", "=", id),
 });
 ```
 
@@ -167,7 +161,7 @@ const databaseLayer = MyDatabase.layer({
         }),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
   // Optional: OpenTelemetry span attributes
   spanAttributes: [
     ["db.system", "postgresql"],
@@ -232,7 +226,7 @@ const databaseLayer = MyDatabase.layer({
         }),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
 });
 ```
 
@@ -255,7 +249,7 @@ const databaseLayer = MyDatabase.layer({
         }),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
 });
 ```
 
@@ -273,7 +267,7 @@ const databaseLayer = MyDatabase.layer({
         database: new BetterSqlite3("database.db"),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))) ,
 });
 ```
 
@@ -296,7 +290,7 @@ const databaseLayer = MyDatabase.layer({
         }),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
 });
 ```
 
@@ -474,6 +468,8 @@ const customQuery = Effect.gen(function* () {
       .where("users.id", "=", 1)
   );
 });
+
+// Or MyDatabase.kysely(db => ...)
 ```
 
 ### Streaming Large Datasets
@@ -564,13 +560,10 @@ const Users = Table({
 
 // Type-safe query operations
 const createUser = MyDatabase.schema.single({
-  Request: Schema.Struct({
-    name: Schema.String,
-    email: Schema.String,
-  }),
+  Request: Users.insert,
   Result: Users.select, // Type-safe result
-  execute: (db, { name, email }) =>
-    db.insertInto("users").values({ name, email }).returningAll(),
+  execute: (db, insert) =>
+    db.insertInto("users").values(insert).returningAll(),
 });
 
 // Type-safe usage
@@ -581,6 +574,33 @@ const user: User = yield* createUser({
 // user.id is typed as number
 // user.name is typed as string
 // user.email is typed as string
+```
+
+### Construct your SqlClient manually
+
+This is essentially what Database.make does internally, but you can construct it manually if you need more control.
+
+Note: Be careful of utilizing row transformations in your SqlClient, as if they are not reflected in your Kysely database schema, you may end up with unexpected results.
+
+```typescript
+// Import the database constructor for your database
+import * as Pg from "effect-sql-kysely/Pg";
+import { makeSqlWithKysely, makeResolver, makeSchema } from 'effect-sql-kysely';
+
+// Construct your database
+const database: Kysely<Database> = ...
+// Construct your SqlClient (if you need)
+const sql: SqlClient = yield* Pg.makeSqlClient({ database });
+// Lift Kysely into an Effect-returning function that utilizes the SqlClient 
+const kysely = makeSqlWithKysely(database, sql);
+// Construct your resolvers helpers
+const resolver = makeResolver(kysely);
+// Cosntructor your schema helpers
+const schema = makeSchema(kysely);
+
+kysely(db => db.selectFrom("users").selectAll());
+resolver.findById(...)
+schema.findAll(...)
 ```
 
 ## Contributing

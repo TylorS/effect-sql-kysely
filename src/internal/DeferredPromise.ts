@@ -16,15 +16,6 @@ export class DeferredPromise<T> {
     return this._promise;
   }
 
-  resolve = (value: T | PromiseLike<T>): void => {
-    if (this._resolve) {
-      this._resolve(value);
-    }
-  };
-
-  reject = (reason?: unknown): void => {
-    if (this._reject) {
-      this._reject(reason);
-    }
-  };
+  resolve = (value: T | PromiseLike<T>): void => this._resolve?.(value);
+  reject = (reason?: unknown): void => this._reject?.(reason);
 }

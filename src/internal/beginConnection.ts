@@ -8,11 +8,11 @@ export async function beginConnection<DB>(db: Kysely<DB>) {
   // Do NOT await this line.
   const transaction = db
     .connection()
-    .execute((trx) => {
-      connection.resolve(trx);
+    .execute((conn) => {
+      connection.resolve(conn);
       return result.promise;
     })
-    .catch(() => null);
+    .catch(connection.reject);
 
   const conn = await connection.promise;
 
@@ -22,8 +22,8 @@ export async function beginConnection<DB>(db: Kysely<DB>) {
       result.resolve(null);
       return transaction;
     },
-    fail() {
-      result.reject(new Error("failure"));
+    fail(cause: unknown) {
+      result.reject(cause);
       return transaction;
     },
   };
