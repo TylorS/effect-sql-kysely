@@ -8,7 +8,7 @@ import type * as Scope from "effect/Scope";
 import type * as kysely from "kysely";
 import { makeResolver } from "./makeResolver.js";
 import { makeSchema } from "./makeSchema.js";
-import { makeSqlClient, makeSqlWithKysely } from "./makeSqlClient.js";
+import { makeSqlClient, makeKyselyEffect } from "./makeSqlClient.js";
 
 export interface KyselyDatabase<DB> {
   readonly sql: SqlClient.SqlClient;
@@ -29,7 +29,7 @@ export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> => {
       Effect.gen(function* () {
         const db = yield* options.acquire;
         const sql = yield* makeSqlClient({ ...options, database: db });
-        return { db, sql, kysely: makeSqlWithKysely(db, sql) };
+        return { db, sql, kysely: makeKyselyEffect(db, sql) };
       }),
     ).pipe(Layer.provide(Reactivity.layer));
 

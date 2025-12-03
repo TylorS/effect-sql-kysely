@@ -105,7 +105,7 @@ export function makeSqlClient<DB>({
   });
 }
 
-export function makeSqlWithKysely<DB>(database: Kysely<DB>, sql: SqlClient.SqlClient) {
+export function makeKyselyEffect<DB>(database: Kysely<DB>, sql: SqlClient.SqlClient) {
   return <Out>(
     f: (db: Kysely<DB>) => Compilable<Out>,
   ): Effect.Effect<ReadonlyArray<Out>, SqlError.SqlError, never> => {

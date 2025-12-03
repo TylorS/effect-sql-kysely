@@ -581,11 +581,11 @@ const user: User = yield* createUser({
 Note: Be careful of utilizing row transformations in your SqlClient, as if they are not reflected in your Kysely database schema, you may end up with unexpected results.
 
 ```typescript
-import { makeSqlWithKysely, makeResolver, makeSchema } from 'effect-sql-kysely';
+import { makeKyselyEffect, makeResolver, makeSchema } from 'effect-sql-kysely';
 
 const db = new Kysely<Database>(...);
 const sql = yield* SqlClient;
-const kysely = makeSqlWithKysely(db, sql);
+const kysely = makeKyselyEffect(db, sql);
 // Construct your resolvers helpers
 const resolver = makeResolver(kysely);
 // Cosntructor your schema helpers
