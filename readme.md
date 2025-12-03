@@ -586,9 +586,17 @@ Note: Be careful of utilizing row transformations in your SqlClient, as if they 
 // Import the database constructor for your database
 import * as Pg from "effect-sql-kysely/Pg";
 import { makeSqlWithKysely, makeResolver, makeSchema } from 'effect-sql-kysely';
+import { DummyDriver, PostgresAdapter, PostgresIntrospector, PostgresQueryCompiler } from "kysely"
 
-// Construct your database
-const database: Kysely<Database> = ...
+// Construct your database to avoid utilizing a dummy driver.
+const database: Kysely<Database> = new Kysely<Database>({ 
+  dialect: {
+    createAdapter: () => new PostgresAdapter(),
+    createDriver: () => new DummyDriver(),
+    createIntrospector: (db) => new PostgresIntrospector(db),
+    createQueryCompiler: () => new PostgresQueryCompiler()
+  } 
+});
 // Construct your SqlClient (if you need)
 const sql: SqlClient = yield* Pg.makeSqlClient({ database });
 // Lift Kysely into an Effect-returning function that utilizes the SqlClient 
