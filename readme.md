@@ -212,12 +212,13 @@ Effect.runPromise(main);
 ```typescript
 import * as Database from "effect-sql-kysely/Pg";
 import * as kysely from "kysely";
+import { Pool } from "pg";
 
 const databaseLayer = MyDatabase.layer({
   acquire: Effect.sync(() =>
     new kysely.Kysely<DatabaseSchema>({
       dialect: new kysely.PostgresDialect({
-        pool: new kysely.Pool({
+        pool: new Pool({
           host: "localhost",
           port: 5432,
           user: "postgres",
