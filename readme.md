@@ -111,13 +111,10 @@ import { Effect, Option } from "effect";
 
 // Create a user
 const createUser = MyDatabase.schema.single({
-  Request: Schema.Struct({
-    name: Schema.String,
-    email: Schema.String,
-  }),
+  Request: Users.insert,
   Result: Users.select,
-  execute: (db, { name, email }) =>
-    db.insertInto("users").values({ name, email }).returningAll(),
+  execute: (db, insert) =>
+    db.insertInto("users").values(insert).returningAll(),
 });
 
 // Find user by ID
@@ -138,12 +135,9 @@ const findPostsByAuthor = MyDatabase.schema.select({
 
 // Update user
 const updateUser = MyDatabase.schema.void({
-  Request: Schema.Struct({
-    id: Schema.Int,
-    name: Schema.String,
-  }),
-  execute: (db, { id, name }) =>
-    db.updateTable("users").set({ name }).where("id", "=", id),
+  Request: Users.update,
+  execute: (db, { id, ...update }) =>
+    db.updateTable("users").set(update).where("id", "=", id),
 });
 ```
 
@@ -564,13 +558,10 @@ const Users = Table({
 
 // Type-safe query operations
 const createUser = MyDatabase.schema.single({
-  Request: Schema.Struct({
-    name: Schema.String,
-    email: Schema.String,
-  }),
+  Request: Users.insert,
   Result: Users.select, // Type-safe result
-  execute: (db, { name, email }) =>
-    db.insertInto("users").values({ name, email }).returningAll(),
+  execute: (db, insert) =>
+    db.insertInto("users").values(insert).returningAll(),
 });
 
 // Type-safe usage

@@ -41,10 +41,10 @@ describe("database", () => {
   });
 
   const createUser = TestDatabase.schema.single({
-    Request: Users.select.fields.name,
+    Request: Users.insert,
     Result: Users.select,
-    execute: (db, name) =>
-      db.insertInto("users").values({ name }).returningAll(),
+    execute: (db, insert) =>
+      db.insertInto("users").values(insert).returningAll(),
   });
 
   const findUser = TestDatabase.schema.findOne({
@@ -56,7 +56,7 @@ describe("database", () => {
 
   it.scoped("allows making SQL queries", () =>
     Effect.gen(function* () {
-      const created = yield* createUser("Test");
+      const created = yield* createUser({ name: "Test" });
       const selected = yield* findUser(created.id);
 
       expect(Option.some(created)).toEqual(selected);
@@ -65,7 +65,7 @@ describe("database", () => {
 
   it.scoped("allows making SQL queries with transactions", () =>
     Effect.gen(function* () {
-      const created = yield* createUser("Test");
+      const created = yield* createUser({ name: "Test" });
       const selected = yield* findUser(created.id);
 
       expect(Option.some(created)).toEqual(selected);
@@ -78,7 +78,7 @@ describe("database", () => {
   it.scoped("allows resolving by id", () => Effect.gen(function* () {
     const total = 10
 
-    const created = yield* Effect.all(globalThis.Array.from({ length: total }, (_, i) => createUser(`Test ${i}`)))
+    const created = yield* Effect.all(globalThis.Array.from({ length: total }, (_, i) => createUser({ name: `Test ${i}` })))
 
     const resolver = yield* TestDatabase.resolver.findById('FindUser', {
       Id: Users.select.fields.id,

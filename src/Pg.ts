@@ -1,9 +1,9 @@
+import { PgClient } from "@effect/sql-pg";
 import type { Effect } from "effect";
-import * as Database from "./Database.js";
-import * as Client from "@effect/sql-pg";
-import type * as Scope from "effect/Scope";
 import type * as Layer from "effect/Layer";
+import type * as Scope from "effect/Scope";
 import type * as kysely from "kysely";
+import * as Database from "./Database.js";
 
 export const make = <DB, Self>(id: string): PgDatabaseConstructor<DB, Self> => {
   const base = Database.make<DB, Self>(id);
@@ -16,7 +16,7 @@ export const make = <DB, Self>(id: string): PgDatabaseConstructor<DB, Self> => {
     }): Layer.Layer<Self, E, Exclude<R, Scope.Scope>> =>
       base.layerWithCompiler({
         ...options,
-        compiler: Client.PgClient.makeCompiler(),
+        compiler: PgClient.makeCompiler(),
       })
   })
 }

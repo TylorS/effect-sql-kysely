@@ -22,8 +22,8 @@ export async function beginConnection<DB>(db: Kysely<DB>) {
       result.resolve(null);
       return transaction;
     },
-    fail() {
-      result.reject(new Error("failure"));
+    fail(cause: unknown) {
+      result.reject(cause);
       return transaction;
     },
   };
