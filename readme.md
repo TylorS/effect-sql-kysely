@@ -580,6 +580,8 @@ const user: User = yield* createUser({
 
 This is essentially what Database.make does internally, but you can construct it manually if you need more control.
 
+Note: Be careful of utilizing row transformations in your SqlClient, as if they are not reflected in your Kysely database schema, you may end up with unexpected results.
+
 ```typescript
 // Import the database constructor for your database
 import * as Pg from "effect-sql-kysely/Pg";
