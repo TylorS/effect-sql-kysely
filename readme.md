@@ -576,37 +576,22 @@ const user: User = yield* createUser({
 // user.email is typed as string
 ```
 
-### Construct your SqlClient manually
-
-This is essentially what Database.make does internally, but you can construct it manually if you need more control.
+### Utilize Kysely as a query builder only
 
 Note: Be careful of utilizing row transformations in your SqlClient, as if they are not reflected in your Kysely database schema, you may end up with unexpected results.
 
 ```typescript
-// Import the database constructor for your database
-import * as Pg from "effect-sql-kysely/Pg";
 import { makeSqlWithKysely, makeResolver, makeSchema } from 'effect-sql-kysely';
-import { DummyDriver, PostgresAdapter, PostgresIntrospector, PostgresQueryCompiler } from "kysely"
 
-// Construct your database to avoid utilizing a dummy driver.
-const database: Kysely<Database> = new Kysely<Database>({ 
-  dialect: {
-    createAdapter: () => new PostgresAdapter(),
-    createDriver: () => new DummyDriver(),
-    createIntrospector: (db) => new PostgresIntrospector(db),
-    createQueryCompiler: () => new PostgresQueryCompiler()
-  } 
-});
-// Construct your SqlClient (if you need)
-const sql: SqlClient = yield* Pg.makeSqlClient({ database });
-// Lift Kysely into an Effect-returning function that utilizes the SqlClient 
-const kysely = makeSqlWithKysely(database, sql);
+const db = new Kysely<Database>(...);
+const sql = yield* SqlClient;
+const kysely = makeSqlWithKysely(db, sql);
 // Construct your resolvers helpers
 const resolver = makeResolver(kysely);
 // Cosntructor your schema helpers
 const schema = makeSchema(kysely);
 
-kysely(db => db.selectFrom("users").selectAll());
+yield* kysely(db => db.selectFrom("users").selectAll());
 resolver.findById(...)
 schema.findAll(...)
 ```
