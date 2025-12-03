@@ -6,13 +6,14 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import type * as Scope from "effect/Scope";
 import type * as kysely from "kysely";
-import { makeResolver } from "./internal/makeResolver.js";
-import { makeSchema } from "./internal/makeSchema.js";
-import { makeSqlClient } from "./makeSqlClient.js";
+import { makeResolver } from "./makeResolver.js";
+import { makeSchema } from "./makeSchema.js";
+import { makeSqlClient, makeSqlWithKysely } from "./makeSqlClient.js";
 
 export interface KyselyDatabase<DB> {
   readonly sql: SqlClient.SqlClient;
   readonly db: kysely.Kysely<DB>;
+  
   readonly kysely: <Out extends Row>(
     f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>,
   ) => Effect.Effect<ReadonlyArray<Out>, SqlError.SqlError, never>;
@@ -20,34 +21,21 @@ export interface KyselyDatabase<DB> {
 
 export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> => {
   const Tag = Context.Tag<string>(id)<Self, KyselyDatabase<DB>>();
+  const Kysely = Effect.map(Tag, ({ kysely }) => kysely);
 
   const layerWithCompiler: DatabaseConstructor<DB, Self>["layerWithCompiler"] = (options) =>
     Layer.scoped(
       Tag,
       Effect.gen(function* () {
-        const db: kysely.Kysely<DB> = yield* Effect.acquireRelease(options.acquire, (database) =>
-          Effect.promise(() => database.destroy()),
-        );
-        const sql: KyselyDatabase<DB>["sql"] = yield* makeSqlClient({ ...options, database: db });
-        const kysely: KyselyDatabase<DB>["kysely"] = <Out>(
-          f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>,
-        ) => {
-          // We utilize compile() and sql.unsafe to enable utilizing Effect's notion of a Transaction
-          const compiled = f(db).compile();
-          return sql.unsafe(compiled.sql, compiled.parameters) as unknown as Effect.Effect<
-            ReadonlyArray<Out>,
-            SqlError.SqlError,
-            never
-          >;
-        };
-
-        return { sql, db, kysely };
+        const db = yield* options.acquire;
+        const sql = yield* makeSqlClient({ ...options, database: db });
+        return { db, sql, kysely: makeSqlWithKysely(db, sql) };
       }),
     ).pipe(Layer.provide(Reactivity.layer));
 
   return Object.assign(Tag, {
-    resolver: makeResolver(Tag),
-    schema: makeSchema(Tag),
+    resolver: makeResolver(Kysely),
+    schema: makeSchema(Kysely),
     layerWithCompiler,
     client: Effect.map(Tag, ({ sql }) => sql),
     kysely: <Out extends Row>(f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>) =>
@@ -62,9 +50,9 @@ export interface CoreDatabaseConstructor<DB, Self> extends Context.TagClass<
   string,
   KyselyDatabase<DB>
 > {
-  readonly resolver: ReturnType<typeof makeResolver<Self, DB>>;
+  readonly resolver: ReturnType<typeof makeResolver<DB, never, Self>>;
 
-  readonly schema: ReturnType<typeof makeSchema<Self, DB>>;
+  readonly schema: ReturnType<typeof makeSchema<DB, never, Self>>;
 
   readonly client: Effect.Effect<SqlClient.SqlClient, never, Self>;
 

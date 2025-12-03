@@ -10,17 +10,15 @@ describe("database", () => {
   class Users extends Table({
     id: Generated(Schema.Int),
     name: Schema.String,
-  }) { }
+  }) {}
 
   const TestSchema = Schema.Struct({
     users: Users,
-  })
+  });
 
-  type TestSchema = typeof TestSchema.Encoded
+  type TestSchema = typeof TestSchema.Encoded;
 
-  class TestDatabase extends Database.make<TestSchema, TestDatabase>(
-    "TestDatabase"
-  ) { }
+  class TestDatabase extends Database.make<TestSchema, TestDatabase>("TestDatabase") {}
 
   const acquire = Effect.promise(async () => {
     const db = new kysely.Kysely<TestSchema>({
@@ -31,27 +29,23 @@ describe("database", () => {
 
     await db.schema
       .createTable("users")
-      .addColumn("id", "integer", (column) =>
-        column.primaryKey().autoIncrement()
-      )
+      .addColumn("id", "integer", (column) => column.primaryKey().autoIncrement())
       .addColumn("name", "text")
       .execute();
 
     return db;
-  });
+  }).pipe(Effect.acquireRelease((db) => Effect.promise(() => db.destroy())));
 
   const createUser = TestDatabase.schema.single({
     Request: Users.insert,
     Result: Users.select,
-    execute: (db, insert) =>
-      db.insertInto("users").values(insert).returningAll(),
+    execute: (db, insert) => db.insertInto("users").values(insert).returningAll(),
   });
 
   const findUser = TestDatabase.schema.findOne({
     Request: Users.select.fields.id,
     Result: Users.select,
-    execute: (db, id) =>
-      db.selectFrom("users").where("id", "=", id).selectAll(),
+    execute: (db, id) => db.selectFrom("users").where("id", "=", id).selectAll(),
   });
 
   it.scoped("allows making SQL queries", () =>
@@ -60,7 +54,7 @@ describe("database", () => {
       const selected = yield* findUser(created.id);
 
       expect(Option.some(created)).toEqual(selected);
-    }).pipe(Effect.provide(TestDatabase.layer({ acquire })))
+    }).pipe(Effect.provide(TestDatabase.layer({ acquire }))),
   );
 
   it.scoped("allows making SQL queries with transactions", () =>
@@ -69,32 +63,36 @@ describe("database", () => {
       const selected = yield* findUser(created.id);
 
       expect(Option.some(created)).toEqual(selected);
-    }).pipe(
-      TestDatabase.withTransaction,
-      Effect.provide(TestDatabase.layer({ acquire })),
-    )
+    }).pipe(TestDatabase.withTransaction, Effect.provide(TestDatabase.layer({ acquire }))),
   );
 
-  it.scoped("allows resolving by id", () => Effect.gen(function* () {
-    const total = 10
+  it.scoped("allows resolving by id", () =>
+    Effect.gen(function* () {
+      const total = 10;
 
-    const created = yield* Effect.all(globalThis.Array.from({ length: total }, (_, i) => createUser({ name: `Test ${i}` })))
+      const created = yield* Effect.all(
+        globalThis.Array.from({ length: total }, (_, i) => createUser({ name: `Test ${i}` })),
+      );
 
-    const resolver = yield* TestDatabase.resolver.findById('FindUser', {
-      Id: Users.select.fields.id,
-      Result: Users.select,
-      ResultId: (user) => user.id,
-      execute: (db, ids) => {
-        expect(ids.length).toBe(total);
-        return db.selectFrom("users").where("id", 'in', ids).selectAll();
-      },
-    })
+      const resolver = yield* TestDatabase.resolver.findById("FindUser", {
+        Id: Users.select.fields.id,
+        Result: Users.select,
+        ResultId: (user) => user.id,
+        execute: (db, ids) => {
+          expect(ids.length).toBe(total);
+          return db.selectFrom("users").where("id", "in", ids).selectAll();
+        },
+      });
 
-    const selected = yield* Effect.all(created.map(user => resolver.execute(user.id)), { batching: true })
-    const zipped = Array.zip(created, selected)
+      const selected = yield* Effect.all(
+        created.map((user) => resolver.execute(user.id)),
+        { batching: true },
+      );
+      const zipped = Array.zip(created, selected);
 
-    for (const [created, selected] of zipped) {
-      expect(Option.some(created)).toEqual(selected);
-    }
-  }).pipe(Effect.provide(TestDatabase.layer({ acquire }))))
+      for (const [created, selected] of zipped) {
+        expect(Option.some(created)).toEqual(selected);
+      }
+    }).pipe(Effect.provide(TestDatabase.layer({ acquire }))),
+  );
 });

@@ -122,9 +122,9 @@ export const JsonColumnType = <
 > &
   ColumnTypes<typeof select, Insert, Update> => ColumnType(select, insert, update);
 
-type GetSelect<T> = T extends ColumnTypes<infer Select, any, any> ? Select : T
-type GetInsert<T> = T extends ColumnTypes<any, infer Insert, any> ? Insert : T
-type GetUpdate<T> = T extends ColumnTypes<any, any, infer Update> ? Update : T
+type GetSelect<T> = T extends ColumnTypes<infer Select, any, any> ? Select : T;
+type GetInsert<T> = T extends ColumnTypes<any, infer Insert, any> ? Insert : T;
+type GetUpdate<T> = T extends ColumnTypes<any, any, infer Update> ? Update : T;
 
 export interface Table<Columns extends Schema.Struct.Fields>
   extends

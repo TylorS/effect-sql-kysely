@@ -161,7 +161,7 @@ const databaseLayer = MyDatabase.layer({
         }),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
   // Optional: OpenTelemetry span attributes
   spanAttributes: [
     ["db.system", "postgresql"],
@@ -226,7 +226,7 @@ const databaseLayer = MyDatabase.layer({
         }),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
 });
 ```
 
@@ -249,7 +249,7 @@ const databaseLayer = MyDatabase.layer({
         }),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
 });
 ```
 
@@ -267,7 +267,7 @@ const databaseLayer = MyDatabase.layer({
         database: new BetterSqlite3("database.db"),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))) ,
 });
 ```
 
@@ -290,7 +290,7 @@ const databaseLayer = MyDatabase.layer({
         }),
       }),
     })
-  ),
+  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
 });
 ```
 
@@ -468,6 +468,8 @@ const customQuery = Effect.gen(function* () {
       .where("users.id", "=", 1)
   );
 });
+
+// Or MyDatabase.kysely(db => ...)
 ```
 
 ### Streaming Large Datasets
@@ -572,6 +574,31 @@ const user: User = yield* createUser({
 // user.id is typed as number
 // user.name is typed as string
 // user.email is typed as string
+```
+
+### Construct your SqlClient manually
+
+This is essentially what Database.make does internally, but you can construct it manually if you need more control.
+
+```typescript
+// Import the database constructor for your database
+import * as Pg from "effect-sql-kysely/Pg";
+import { makeSqlWithKysely, makeResolver, makeSchema } from 'effect-sql-kysely';
+
+// Construct your database
+const database: Kysely<Database> = ...
+// Construct your SqlClient (if you need)
+const sql: SqlClient = yield* Pg.makeSqlClient({ database });
+// Lift Kysely into an Effect-returning function that utilizes the SqlClient 
+const kysely = makeSqlWithKysely(database, sql);
+// Construct your resolvers helpers
+const resolver = makeResolver(kysely);
+// Cosntructor your schema helpers
+const schema = makeSchema(kysely);
+
+kysely(db => db.selectFrom("users").selectAll());
+resolver.findById(...)
+schema.findAll(...)
 ```
 
 ## Contributing
