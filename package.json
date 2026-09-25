@@ -5,8 +5,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "The contributors",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "tsc",
+    "lint": "eslint src test",
     "test": "vitest --dir test",
     "test:run": "vitest run --dir test",
     "release:patch": "pnpm build && pnpm test:run && pnpm version patch && pnpm publish",
@@ -24,24 +28,24 @@
     "@effect/sql"
   ],
   "license": "MIT",
-  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b",
+  "packageManager": "pnpm@12.6.0",
   "devDependencies": {
     "@effect/language-service": "^0.87.2",
-    "@effect/sql-clickhouse": "4.0.0-rc.117",
-    "@effect/sql-mssql": "4.0.0-rc.117",
-    "@effect/sql-mysql2": "4.0.0-rc.117",
-    "@effect/sql-pg": "4.0.0-rc.117",
-    "@effect/sql-pglite": "4.0.0-rc.117",
-    "@effect/vitest": "4.0.0-rc.117",
-    "@eslint/js": "^9.39.1",
-    "better-sqlite3": "^12.5.0",
-    "effect": "4.0.0-rc.117",
-    "eslint": "^9.39.1",
-    "globals": "^16.5.0",
-    "kysely": "^0.28.8",
+    "@effect/sql-clickhouse": "^4.0.0-rc.117",
+    "@effect/sql-mssql": "^4.0.0-rc.117",
+    "@effect/sql-mysql2": "^4.0.0-rc.117",
+    "@effect/sql-pg": "^4.0.0-rc.117",
+    "@effect/sql-pglite": "^4.0.0-rc.117",
+    "@effect/vitest": "^4.0.0-rc.117",
+    "@eslint/js": "^10.0.1",
+    "better-sqlite3": "^13.0.3",
+    "effect": "^4.0.0-rc.117",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "kysely": "^0.29.6",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.48.1",
-    "vitest": "^5.0.0"
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.2"
   },
   "peerDependencies": {
     "effect": "^4.0.0-rc.117",

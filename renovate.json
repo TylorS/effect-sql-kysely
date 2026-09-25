@@ -1,53 +1,31 @@
 {
-	"extends": [
-		"config:base"
-	],
-	"baseBranches": [
-		"development"
-	],
-	"packageRules": [
-		{
-			"matchDepTypes": [
-				"peerDependencies"
-			],
-			"groupName": "peer and related dependencies",
-			"groupSlug": "peer-related-deps",
-			"updateTypes": [
-				"patch",
-				"minor"
-			],
-			"additionalBranchPrefix": "peer-deps/",
-			"matchPackagePatterns": [
-				"@effect/*",
-				"effect",
-				"kysely"
-			],
-			"schedule": [
-				"before 5am on Monday"
-			]
-		},
-		{
-			"matchPackagePatterns": [
-				"@effect/*",
-				"effect",
-				"kysely"
-			],
-			"groupName": "effect and kysely dependencies",
-			"groupSlug": "effect-kysely-deps",
-			"updateTypes": [
-				"patch",
-				"minor"
-			],
-			"schedule": [
-				"before 5am on Monday"
-			]
-		}
-	],
-	"branchPrefix": "renovate/",
-	"prHourlyLimit": 5,
-	"prConcurrentLimit": 10,
-	"dependencyDashboard": true,
-	"labels": [
-		"dependencies"
-	]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "baseBranches": ["development"],
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "matchPackageNames": ["effect", "@effect/**"],
+      "groupName": "effect monorepo",
+      "groupSlug": "effect",
+      "schedule": ["before 5am on Monday"]
+    },
+    {
+      "matchPackageNames": ["kysely"],
+      "groupName": "kysely",
+      "schedule": ["before 5am on Monday"]
+    },
+    {
+      "matchDepTypes": ["peerDependencies", "optionalPeerDependencies"],
+      "matchPackageNames": ["effect", "@effect/**", "kysely"],
+      "groupName": "effect and kysely peers",
+      "groupSlug": "effect-peers",
+      "schedule": ["before 5am on Monday"]
+    }
+  ],
+  "branchPrefix": "renovate/",
+  "prHourlyLimit": 5,
+  "prConcurrentLimit": 10,
+  "dependencyDashboard": true,
+  "labels": ["dependencies"]
 }

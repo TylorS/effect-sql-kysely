@@ -23,6 +23,8 @@ Integration between [Effect SQL](https://github.com/Effect-TS/effect/tree/main/p
 pnpm add effect-sql-kysely effect kysely
 ```
 
+This repo uses **pnpm 12** (`corepack enable`) and **Node.js 22+** (required by dev dependency `better-sqlite3@13` for tests).
+
 ### Peer dependencies
 
 ```json
