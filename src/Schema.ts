@@ -9,47 +9,7 @@ import type * as kysely from "kysely";
 export const ColumnTypesId = Symbol.for("effect-sql-kysely/ColumnTypesId");
 export type ColumnTypesId = typeof ColumnTypesId;
 
-type AnySchema = Schema.Schema.All | Schema.PropertySignature.All;
-
-type TypeOf<T> = T extends Schema.Schema.All
-  ? Schema.Schema.Type<T>
-  : T extends Schema.PropertySignature<
-        infer _TypeToken,
-        infer _Type,
-        infer _Key,
-        infer _EncodedToken,
-        infer _Encoded,
-        infer _HasDefault,
-        infer _R
-      >
-    ? _Type
-    : never;
-type EncodedOf<T> = T extends Schema.Schema.All
-  ? Schema.Schema.Encoded<T>
-  : T extends Schema.PropertySignature<
-        infer _TypeToken,
-        infer _Type,
-        infer _Key,
-        infer _EncodedToken,
-        infer _Encoded,
-        infer _HasDefault,
-        infer _R
-      >
-    ? _Encoded
-    : never;
-type ContextOf<T> = T extends Schema.Schema.All
-  ? Schema.Schema.Context<T>
-  : T extends Schema.PropertySignature<
-        infer _TypeToken,
-        infer _Type,
-        infer _Key,
-        infer _EncodedToken,
-        infer _Encoded,
-        infer _HasDefault,
-        infer _R
-      >
-    ? _R
-    : never;
+type AnySchema = Schema.Constraint;
 
 export interface ColumnTypes<
   Select extends AnySchema,
@@ -70,57 +30,39 @@ export const ColumnType = <
   select: Select,
   insert: Insert,
   update: Update,
-): Schema.Schema<
-  kysely.ColumnType<TypeOf<Select>, TypeOf<Insert>, TypeOf<Update>>,
-  kysely.ColumnType<EncodedOf<Select>, EncodedOf<Insert>, EncodedOf<Update>>,
-  ContextOf<Select | Insert | Update>
-> &
+): AnySchema &
   ColumnTypes<Select, Insert, Update> => {
-  return Object.assign(
-    Schema.make<any, any, never>(Schema.Never.ast).annotations({
-      message: () =>
-        `ColumnType Schema is not intended to be used directly. Utilize ColumnType.[select|insert|update]`,
-    }),
-    {
-      [ColumnTypesId]: ColumnTypesId,
-      select,
-      insert,
-      update,
-    } as const,
-  );
+  return Object.assign(Schema.Never, {
+    [ColumnTypesId]: ColumnTypesId,
+    select,
+    insert,
+    update,
+  } as const);
 };
 
 export const isColumnTypes = (value: unknown): value is ColumnTypes<any, any, any> =>
   hasProperty(value, ColumnTypesId);
 
-export const Generated = <A, I, R>(
-  schema: Schema.Schema<A, I, R>,
-): Schema.Schema<kysely.Generated<A>, kysely.Generated<I>, R> &
-  ColumnTypes<typeof schema, Schema.optional<typeof schema>, typeof schema> =>
+export const Generated = <A extends AnySchema>(
+  schema: A,
+): AnySchema &
+  ColumnTypes<A, ReturnType<typeof Schema.optional<A>>, A> =>
   ColumnType(schema, Schema.optional(schema), schema);
 
-export const GeneratedAlways = <A, I, R>(
-  schema: Schema.Schema<A, I, R>,
-): Schema.Schema<kysely.GeneratedAlways<A>, kysely.GeneratedAlways<I>, R> &
-  ColumnTypes<typeof schema, typeof Schema.Never, typeof Schema.Never> =>
+export const GeneratedAlways = <A extends AnySchema>(
+  schema: A,
+): AnySchema & ColumnTypes<A, typeof Schema.Never, typeof Schema.Never> =>
   ColumnType(schema, Schema.Never, Schema.Never);
 
 export const JsonColumnType = <
-  SelectType extends object | null,
-  SelectEncoded extends object | null,
-  SelectContext,
-  Insert extends Schema.Schema<string, string, any> = Schema.Schema<string, string, never>,
-  Update extends Schema.Schema<string, string, any> = Schema.Schema<string, string, never>,
+  Select extends AnySchema,
+  Insert extends AnySchema = Schema.Constraint & { readonly Type: string; readonly Encoded: string },
+  Update extends AnySchema = Schema.Constraint & { readonly Type: string; readonly Encoded: string },
 >(
-  select: Schema.Schema<SelectType, SelectEncoded, SelectContext>,
+  select: Select,
   insert: Insert = Schema.String as any,
   update: Update = Schema.String as any,
-): Schema.Schema<
-  kysely.JSONColumnType<TypeOf<typeof select>, TypeOf<Insert>, TypeOf<Update>>,
-  kysely.JSONColumnType<EncodedOf<typeof select>, EncodedOf<Insert>, EncodedOf<Update>>,
-  ContextOf<typeof select | Insert | Update>
-> &
-  ColumnTypes<typeof select, Insert, Update> => ColumnType(select, insert, update);
+): AnySchema & ColumnTypes<Select, Insert, Update> => ColumnType(select, insert, update);
 
 type GetSelect<T> = T extends ColumnTypes<infer Select, any, any> ? Select : T;
 type GetInsert<T> = T extends ColumnTypes<any, infer Insert, any> ? Insert : T;

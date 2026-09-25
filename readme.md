@@ -13,7 +13,7 @@ Given we just implement `SqlClient` atop of `Kysely` any and all 3rd-party tooli
 - **Schema validation** with Effect Schema
 - **Batched queries** with intelligent resolvers
 - **Transaction support** with automatic rollback on failure
-- **Multiple database support**: PostgreSQL, MySQL, SQLite, and MS SQL Server
+- **Multiple database support**: PostgreSQL, PGlite, MySQL, MS SQL, ClickHouse, SQLite/libSQL/D1, and other [Effect SQL drivers](https://github.com/Effect-TS/effect/tree/main/packages/sql)
 - **OpenTelemetry integration** for observability
 - **Streaming support** for large datasets
 - **Third-party integration** support (e.g., PowerSync)
@@ -42,20 +42,25 @@ This library requires the following peer dependencies:
 
 ### Optional Database Drivers
 
-For specific database support, install the corresponding `@effect/sql-*` package:
+For specific database support, install the matching `@effect/sql-*` package (Effect 4 RC). Import the same name from `effect-sql-kysely`:
 
-```bash
-# PostgreSQL
-npm install @effect/sql-pg
+| Entry point | `@effect/sql-*` package |
+|-------------|-------------------------|
+| `effect-sql-kysely/Pg` | `@effect/sql-pg` |
+| `effect-sql-kysely/Pglite` | `@effect/sql-pglite` |
+| `effect-sql-kysely/MySql2` | `@effect/sql-mysql2` |
+| `effect-sql-kysely/MsSql` | `@effect/sql-mssql` |
+| `effect-sql-kysely/Clickhouse` | `@effect/sql-clickhouse` |
+| `effect-sql-kysely/Sqlite` | (SQLite compiler from `effect`; pair with any Kysely SQLite dialect) |
+| `effect-sql-kysely/SqliteNode` | `@effect/sql-sqlite-node` |
+| `effect-sql-kysely/SqliteBun` | `@effect/sql-sqlite-bun` |
+| `effect-sql-kysely/SqliteDo` | `@effect/sql-sqlite-do` |
+| `effect-sql-kysely/SqliteWasm` | `@effect/sql-sqlite-wasm` |
+| `effect-sql-kysely/SqliteReactNative` | `@effect/sql-sqlite-react-native` |
+| `effect-sql-kysely/D1` | `@effect/sql-d1` |
+| `effect-sql-kysely/Libsql` | `@effect/sql-libsql` |
 
-# MySQL
-npm install @effect/sql-mysql2
-
-# MS SQL Server
-npm install @effect/sql-mssql
-
-# SQLite (included with @effect/sql)
-```
+SQLite-family entry points (`Sqlite`, `D1`, `Libsql`, `SqliteNode`, …) all use Effect’s SQLite statement compiler—the entry point you choose should match the `@effect/sql-*` driver you run alongside Kysely.
 
 ## Quick Start
 
@@ -94,10 +99,7 @@ type DatabaseSchema = typeof DatabaseSchema.Encoded;
 
 ```typescript
 import * as Database from "effect-sql-kysely/Pg";
-// or for specific databases:
-// import * as Database from "effect-sql-kysely/MySql2";
-// import * as Database from "effect-sql-kysely/MsSql";
-// import * as Database from "effect-sql-kysely/Sqlite";
+// See the driver table above for MySql2, MsSql, Clickhouse, Pglite, Libsql, D1, Sqlite*, etc.
 
 class MyDatabase extends Database.make<DatabaseSchema, MyDatabase>("MyDatabase") {}
 ```
