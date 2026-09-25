@@ -20,21 +20,24 @@ describe("database", () => {
 
   class TestDatabase extends Database.make<TestSchema, TestDatabase>("TestDatabase") {}
 
-  const acquire = Effect.promise(async () => {
-    const db = new kysely.Kysely<TestSchema>({
-      dialect: new kysely.SqliteDialect({
-        database: new BetterSqlite3(":memory:"),
-      }),
-    });
+  const acquire = Effect.acquireRelease(
+    Effect.promise(async () => {
+      const db = new kysely.Kysely<TestSchema>({
+        dialect: new kysely.SqliteDialect({
+          database: new BetterSqlite3(":memory:"),
+        }),
+      });
 
-    await db.schema
-      .createTable("users")
-      .addColumn("id", "integer", (column) => column.primaryKey().autoIncrement())
-      .addColumn("name", "text")
-      .execute();
+      await db.schema
+        .createTable("users")
+        .addColumn("id", "integer", (column) => column.primaryKey().autoIncrement())
+        .addColumn("name", "text")
+        .execute();
 
-    return db;
-  }).pipe(Effect.acquireRelease((db) => Effect.promise(() => db.destroy())));
+      return db;
+    }),
+    (db) => Effect.promise(() => db.destroy()),
+  );
 
   const createUser = TestDatabase.schema.single({
     Request: Users.insert,
@@ -48,7 +51,7 @@ describe("database", () => {
     execute: (db, id) => db.selectFrom("users").where("id", "=", id).selectAll(),
   });
 
-  it.scoped("allows making SQL queries", () =>
+  it.effect("allows making SQL queries", () =>
     Effect.gen(function* () {
       const created = yield* createUser({ name: "Test" });
       const selected = yield* findUser(created.id);
@@ -57,7 +60,7 @@ describe("database", () => {
     }).pipe(Effect.provide(TestDatabase.layer({ acquire }))),
   );
 
-  it.scoped("allows making SQL queries with transactions", () =>
+  it.effect("allows making SQL queries with transactions", () =>
     Effect.gen(function* () {
       const created = yield* createUser({ name: "Test" });
       const selected = yield* findUser(created.id);
@@ -66,7 +69,7 @@ describe("database", () => {
     }).pipe(TestDatabase.withTransaction, Effect.provide(TestDatabase.layer({ acquire }))),
   );
 
-  it.scoped("allows resolving by id", () =>
+  it.effect("allows resolving by id", () =>
     Effect.gen(function* () {
       const total = 10;
 
@@ -86,12 +89,12 @@ describe("database", () => {
 
       const selected = yield* Effect.all(
         created.map((user) => resolver.execute(user.id)),
-        { batching: true },
+        { concurrency: "unbounded" },
       );
       const zipped = Array.zip(created, selected);
 
-      for (const [created, selected] of zipped) {
-        expect(Option.some(created)).toEqual(selected);
+      for (const [createdUser, selectedUser] of zipped) {
+        expect(createdUser).toEqual(selectedUser);
       }
     }).pipe(Effect.provide(TestDatabase.layer({ acquire }))),
   );

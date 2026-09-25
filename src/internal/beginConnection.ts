@@ -3,7 +3,7 @@ import { DeferredPromise } from "./DeferredPromise.js";
 
 export async function beginConnection<DB>(db: Kysely<DB>) {
   const connection = new DeferredPromise<Kysely<DB>>();
-  const result = new DeferredPromise<unknown>();
+  const result = new DeferredPromise<void>();
 
   // Do NOT await this line.
   const transaction = db
@@ -19,7 +19,7 @@ export async function beginConnection<DB>(db: Kysely<DB>) {
   return {
     conn,
     success() {
-      result.resolve(null);
+      result.resolve();
       return transaction;
     },
     fail(cause: unknown) {

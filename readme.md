@@ -1,71 +1,77 @@
 # effect-sql-kysely
 
-A full-featured integration between `@effect/sql` and `Kysely` that provides type-safe database operations with Effect's powerful error handling and resource management.
+Integration between [Effect SQL](https://github.com/Effect-TS/effect/tree/main/packages/sql) and [Kysely](https://kysely.dev/) for type-safe queries with Effect error handling and resource management.
 
-`effect-sql-kysely` implements the [`SqlClient`](https://effect-ts.github.io/effect/sql/SqlClient.ts.html#sqlclient-interface) interface directly, meaning Kysely manages database connections, transactions, and query compilation while Effect handles the execution context, error handling, and resource lifecycle.
+**Requires Effect 4** (`effect@^4.0.0-rc.117`). SQL types and services live under `effect/unstable/sql` in that release.
 
-Given we just implement `SqlClient` atop of `Kysely` any and all 3rd-party tooling for Kysely or `@effect/sql` are 100% compatible.
+`effect-sql-kysely` implements the [`SqlClient`](https://effect.website/docs/sql/SqlClient) interface on top of Kysely: Kysely owns connections, transactions, and query building; Effect owns execution, errors, layers, and request batching. Tooling built for Kysely or Effect SQL remains compatible.
 
 ## Features
 
-- **Type-safe database operations** with Kysely's query builder
-- **Effect-based error handling** and resource management
-- **Schema validation** with Effect Schema
-- **Batched queries** with intelligent resolvers
-- **Transaction support** with automatic rollback on failure
-- **Multiple database support**: PostgreSQL, MySQL, SQLite, and MS SQL Server
-- **OpenTelemetry integration** for observability
-- **Streaming support** for large datasets
-- **Third-party integration** support (e.g., PowerSync)
+- **Type-safe queries** with Kysely’s query builder
+- **Effect** errors, layers, scopes, and structured concurrency
+- **Schema helpers** aligned with `SqlSchema` (`findAll`, `findOne`, `single`, `void`, …)
+- **Resolvers** with batched `findById`, `grouped`, `ordered`, and `void`
+- **Transactions** via `withTransaction` (rollback on failure)
+- **Drivers** matching all [Effect SQL packages](https://github.com/Effect-TS/effect/tree/main/packages/sql) that expose a statement compiler (Postgres, PGlite, MySQL, MSSQL, ClickHouse, SQLite, libSQL, D1, …)
+- **OpenTelemetry** via optional span attributes on the SQL client
+- **Streaming** through Kysely executors and `SqlClient` stream execution
 
 ## Installation
 
 ```bash
-npm install effect-sql-kysely
-# or
-pnpm add effect-sql-kysely
-# or
-yarn add effect-sql-kysely
+pnpm add effect-sql-kysely effect kysely
 ```
 
-### Peer Dependencies
+This repo uses **pnpm 12** (`corepack enable`) and **Node.js 22+** (required by dev dependency `better-sqlite3@13` for tests).
 
-This library requires the following peer dependencies:
+### Peer dependencies
 
 ```json
 {
-  "@effect/sql": "^0.44.0",
-  "effect": "^3.17.1",
+  "effect": "^4.0.0-rc.117",
   "kysely": "^0.28.3"
 }
 ```
 
-### Optional Database Drivers
+Install the `@effect/sql-*` driver that matches your database when you use that driver’s layers or types alongside this library (see table below).
 
-For specific database support, install the corresponding `@effect/sql-*` package:
+### Entry points and drivers
+
+Pick the `effect-sql-kysely` import that matches the [`@effect/sql-*`](https://github.com/Effect-TS/effect/tree/main/packages/sql) package you use. All packages should be on the **same Effect 4 RC** version as `effect` (e.g. `4.0.0-rc.117`).
+
+| Import | `@effect/sql-*` package | Notes |
+|--------|-------------------------|--------|
+| `effect-sql-kysely/Pg` | `@effect/sql-pg` | PostgreSQL |
+| `effect-sql-kysely/Pglite` | `@effect/sql-pglite` | Embedded Postgres (PGlite) |
+| `effect-sql-kysely/MySql2` | `@effect/sql-mysql2` | MySQL / MariaDB |
+| `effect-sql-kysely/MsSql` | `@effect/sql-mssql` | Microsoft SQL Server |
+| `effect-sql-kysely/Clickhouse` | `@effect/sql-clickhouse` | ClickHouse |
+| `effect-sql-kysely/Sqlite` | — | Generic SQLite compiler (any Kysely SQLite dialect) |
+| `effect-sql-kysely/SqliteNode` | `@effect/sql-sqlite-node` | Node `node:sqlite` / better-sqlite3-style setups via Kysely |
+| `effect-sql-kysely/SqliteBun` | `@effect/sql-sqlite-bun` | Bun SQLite |
+| `effect-sql-kysely/SqliteDo` | `@effect/sql-sqlite-do` | Cloudflare Durable Objects SQLite |
+| `effect-sql-kysely/SqliteWasm` | `@effect/sql-sqlite-wasm` | WASM SQLite |
+| `effect-sql-kysely/SqliteReactNative` | `@effect/sql-sqlite-react-native` | React Native SQLite |
+| `effect-sql-kysely/D1` | `@effect/sql-d1` | Cloudflare D1 |
+| `effect-sql-kysely/Libsql` | `@effect/sql-libsql` | libSQL / Turso |
+
+SQLite-family entry points (`Sqlite`, `D1`, `Libsql`, `SqliteNode`, …) share the same **SQLite statement compiler** from `effect/unstable/sql`. Choose the entry point that documents which driver you pair with Kysely; behavior is identical aside from typing ergonomics.
+
+Example:
 
 ```bash
-# PostgreSQL
-npm install @effect/sql-pg
-
-# MySQL
-npm install @effect/sql-mysql2
-
-# MS SQL Server
-npm install @effect/sql-mssql
-
-# SQLite (included with @effect/sql)
+pnpm add @effect/sql-pg   # when using effect-sql-kysely/Pg
 ```
 
-## Quick Start
+## Quick start
 
-### 1. Define Your Schema
+### 1. Define schema (Effect Schema + Kysely column shapes)
 
 ```typescript
 import { Table, Generated } from "effect-sql-kysely";
 import * as Schema from "effect/Schema";
 
-// Define table schemas with Kysely column types
 const Users = Table({
   id: Generated(Schema.Int),
   name: Schema.String,
@@ -78,10 +84,9 @@ const Posts = Table({
   title: Schema.String,
   content: Schema.String,
   authorId: Schema.Int,
-  publishedAt: Schema.OptionFromSelf(Schema.DateFromString),
+  publishedAt: Schema.optional(Schema.DateFromString),
 });
 
-// Create database schema
 const DatabaseSchema = Schema.Struct({
   users: Users,
   posts: Posts,
@@ -90,26 +95,24 @@ const DatabaseSchema = Schema.Struct({
 type DatabaseSchema = typeof DatabaseSchema.Encoded;
 ```
 
-### 2. Create Database Instance
+Each `Table` exposes `.select`, `.insert`, and `.update` schemas for Kysely row shapes.
+
+### 2. Database service tag
 
 ```typescript
 import * as Database from "effect-sql-kysely/Pg";
-// or for specific databases:
-// import * as Database from "effect-sql-kysely/MySql2";
-// import * as Database from "effect-sql-kysely/MsSql";
-// import * as Database from "effect-sql-kysely/Sqlite";
+// or MySql2, MsSql, Clickhouse, Pglite, Sqlite, Libsql, D1, …
 
 class MyDatabase extends Database.make<DatabaseSchema, MyDatabase>("MyDatabase") {}
 ```
 
-### 3. Define Query Operations
+### 3. Query helpers (`schema`)
 
-> These are kysely-enhanced versions of `@effect/sql`'s `Sql.SqlSchema.*`
+These mirror [SqlSchema](https://effect.website/docs/sql/SqlSchema) but take `(db, request) => Compilable` so the query stays in Kysely.
 
 ```typescript
 import { Effect, Option } from "effect";
 
-// Create a user
 const createUser = MyDatabase.schema.single({
   Request: Users.insert,
   Result: Users.select,
@@ -117,7 +120,6 @@ const createUser = MyDatabase.schema.single({
     db.insertInto("users").values(insert).returningAll(),
 });
 
-// Find user by ID
 const findUser = MyDatabase.schema.findOne({
   Request: Users.select.fields.id,
   Result: Users.select,
@@ -125,7 +127,6 @@ const findUser = MyDatabase.schema.findOne({
     db.selectFrom("users").where("id", "=", id).selectAll(),
 });
 
-// Find all posts by author
 const findPostsByAuthor = MyDatabase.schema.select({
   Request: Users.select.fields.id,
   Result: Posts.select,
@@ -133,223 +134,141 @@ const findPostsByAuthor = MyDatabase.schema.select({
     db.selectFrom("posts").where("authorId", "=", authorId).selectAll(),
 });
 
-// Update user
 const updateUser = MyDatabase.schema.void({
   Request: Users.update,
-  execute: (db, { id, ...update }) =>
-    db.updateTable("users").set(update).where("id", "=", id),
+  execute: (update, db) =>
+    db.updateTable("users").set(update).where("id", "=", update.id),
 });
 ```
 
-### 4. Set Up Database Connection
+### 4. Layer (scoped Kysely instance)
+
+Use `Effect.acquireRelease` for lifecycle (Effect 4):
 
 ```typescript
-import * as Effect from "effect";
+import { Effect } from "effect";
 import * as kysely from "kysely";
+import { Pool } from "pg";
 
-// PostgreSQL example
 const databaseLayer = MyDatabase.layer({
-  acquire: Effect.sync(() =>
-    new kysely.Kysely<DatabaseSchema>({
-      dialect: new kysely.PostgresDialect({
-        pool: new kysely.Pool({
-          host: "localhost",
-          port: 5432,
-          user: "postgres",
-          password: "password",
-          database: "myapp",
+  acquire: Effect.acquireRelease(
+    Effect.sync(
+      () =>
+        new kysely.Kysely<DatabaseSchema>({
+          dialect: new kysely.PostgresDialect({
+            pool: new Pool({
+              host: "localhost",
+              port: 5432,
+              user: "postgres",
+              password: "password",
+              database: "myapp",
+            }),
+          }),
         }),
-      }),
-    })
-  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
-  // Optional: OpenTelemetry span attributes
+    ),
+    (db) => Effect.promise(() => db.destroy()),
+  ),
   spanAttributes: [
     ["db.system", "postgresql"],
     ["db.name", "myapp"],
   ],
-  // Optional: Chunk size for streaming (default: 16)
   chunkSize: 32,
 });
 ```
 
-### 5. Use in Your Application
+### 5. Run
 
 ```typescript
 const main = Effect.gen(function* () {
-  // Create a user
   const user = yield* createUser({
     name: "John Doe",
     email: "john@example.com",
   });
 
-  // Find the user
   const foundUser = yield* findUser(user.id);
   console.log("Found user:", Option.getOrNull(foundUser));
 
-  // Create a post for the user
-  const post = yield* createPost({
-    title: "My First Post",
-    content: "Hello, world!",
-    authorId: user.id,
-  });
+  const posts = yield* findPostsByAuthor(user.id);
+  console.log("Posts:", posts);
+}).pipe(Effect.provide(databaseLayer), Effect.scoped);
 
-  // Find all posts by the user
-  const userPosts = yield* findPostsByAuthor(user.id);
-  console.log("User posts:", userPosts);
-}).pipe(
-  Effect.provide(databaseLayer),
-  Effect.scoped
-);
-
-// Run the effect
 Effect.runPromise(main);
 ```
 
-## Database Support
+Tests in this repo use `@effect/vitest` with `it.effect` (not `it.scoped`).
 
-### PostgreSQL
+## Database examples
+
+Use the same `layer({ acquire, … })` pattern; only the **import** and **Kysely dialect** change.
+
+### PostgreSQL (`Pg`)
 
 ```typescript
 import * as Database from "effect-sql-kysely/Pg";
-import * as kysely from "kysely";
 import { Pool } from "pg";
-
-const databaseLayer = MyDatabase.layer({
-  acquire: Effect.sync(() =>
-    new kysely.Kysely<DatabaseSchema>({
-      dialect: new kysely.PostgresDialect({
-        pool: new Pool({
-          host: "localhost",
-          port: 5432,
-          user: "postgres",
-          password: "password",
-          database: "myapp",
-        }),
-      }),
-    })
-  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
-});
+// … PostgresDialect + Pool as in quick start
 ```
 
-### MySQL
+### MySQL (`MySql2`)
 
 ```typescript
 import * as Database from "effect-sql-kysely/MySql2";
-import * as kysely from "kysely";
-
-const databaseLayer = MyDatabase.layer({
-  acquire: Effect.sync(() =>
-    new kysely.Kysely<DatabaseSchema>({
-      dialect: new kysely.MySqlDialect({
-        pool: new kysely.Pool({
-          host: "localhost",
-          port: 3306,
-          user: "root",
-          password: "password",
-          database: "myapp",
-        }),
-      }),
-    })
-  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
-});
+// … MySqlDialect + mysql2 pool
 ```
 
-### SQLite
+### SQLite (`Sqlite` or `SqliteNode`)
 
 ```typescript
 import * as Database from "effect-sql-kysely/Sqlite";
-import * as kysely from "kysely";
 import BetterSqlite3 from "better-sqlite3";
 
 const databaseLayer = MyDatabase.layer({
-  acquire: Effect.sync(() =>
-    new kysely.Kysely<DatabaseSchema>({
-      dialect: new kysely.SqliteDialect({
-        database: new BetterSqlite3("database.db"),
-      }),
-    })
-  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))) ,
+  acquire: Effect.acquireRelease(
+    Effect.sync(
+      () =>
+        new kysely.Kysely<DatabaseSchema>({
+          dialect: new kysely.SqliteDialect({
+            database: new BetterSqlite3("database.db"),
+          }),
+        }),
+    ),
+    (db) => Effect.promise(() => db.destroy()),
+  ),
 });
 ```
 
-### MS SQL Server
+For `@effect/sql-sqlite-node`, prefer `effect-sql-kysely/SqliteNode` as the import name.
+
+### MS SQL (`MsSql`)
 
 ```typescript
 import * as Database from "effect-sql-kysely/MsSql";
-import * as kysely from "kysely";
-
-const databaseLayer = MyDatabase.layer({
-  acquire: Effect.sync(() =>
-    new kysely.Kysely<DatabaseSchema>({
-      dialect: new kysely.MssqlDialect({
-        pool: new kysely.Pool({
-          host: "localhost",
-          port: 1433,
-          user: "sa",
-          password: "password",
-          database: "myapp",
-        }),
-      }),
-    })
-  ).pipe(Effect.acquireRelease(database => Effect.promise(() => database.destroy()))),
-});
+// … MssqlDialect + tedious / mssql pool
 ```
 
-## Schema Operations
+### Other drivers
 
-### Available Operations
+Use the [entry point table](#entry-points-and-drivers) and the same layer pattern with the Kysely dialect appropriate for that engine (Postgres-like for PGlite, SQLite-like for D1/libSQL, etc.).
 
-The `schema` object provides several operation types:
+## Schema operations
 
-#### `single` - Returns exactly one result
-```typescript
-const getUser = MyDatabase.schema.single({
-  Request: Schema.Int, // user ID
-  Result: Users.select,
-  execute: (db, id) =>
-    db.selectFrom("users").where("id", "=", id).selectAll(),
-});
-// Returns: Effect<User, NoSuchElementException | SqlError>
-```
+| Method | Result | Empty result |
+|--------|--------|----------------|
+| `single` | one row | fails (`NoSuchElementError`) |
+| `findOne` | `Option` row | `Option.none()` |
+| `select` / `findAll` | array | `[]` |
+| `void` | `void` | — |
 
-#### `findOne` - Returns optional result
-```typescript
-const findUser = MyDatabase.schema.findOne({
-  Request: Schema.Int, // user ID
-  Result: Users.select,
-  execute: (db, id) =>
-    db.selectFrom("users").where("id", "=", id).selectAll(),
-});
-// Returns: Effect<Option<User>, SqlError>
-```
+Errors include `SqlError` and `Schema.SchemaError` where decoding applies.
 
-#### `select` - Returns array of results
-```typescript
-const getAllUsers = MyDatabase.schema.select({
-  Request: Schema.Void,
-  Result: Users.select,
-  execute: (db) => db.selectFrom("users").selectAll(),
-});
-// Returns: Effect<ReadonlyArray<User>, SqlError>
-```
+## Resolvers (batched requests)
 
-#### `void` - No return value
-```typescript
-const deleteUser = MyDatabase.schema.void({
-  Request: Schema.Int, // user ID
-  execute: (db, id) =>
-    db.deleteFrom("users").where("id", "=", id),
-});
-// Returns: Effect<void, SqlError>
-```
+Kysely-enhanced wrappers around [`SqlResolver`](https://effect.website/docs/sql/SqlResolver). Resolvers expose `.execute(payload)` in addition to working with `Effect.request`.
 
-## Resolvers for Batched Queries
+In Effect 4, batch resolver work by running requests **concurrently** (for example `Effect.all` with `{ concurrency: "unbounded" }`), not `{ batching: true }`.
 
-> These are kysely-enhanced versions of `@effect/sql`'s `Sql.SqlResolver.*`
+### `findById`
 
-Resolvers provide intelligent batching for N+1 query problems:
-
-### `findById` - Batch by ID
 ```typescript
 const userResolver = yield* MyDatabase.resolver.findById("FindUser", {
   Id: Users.select.fields.id,
@@ -359,247 +278,125 @@ const userResolver = yield* MyDatabase.resolver.findById("FindUser", {
     db.selectFrom("users").where("id", "in", ids).selectAll(),
 });
 
-// Use with batching
 const users = yield* Effect.all(
-  userIds.map(id => userResolver.execute(id)),
-  { batching: true }
+  userIds.map((id) => userResolver.execute(id)),
+  { concurrency: "unbounded" },
 );
 ```
 
-### `grouped` - Group results by key
+Missing ids fail with `NoSuchElementError` (Effect 4); they are no longer returned as `Option.none` from the resolver.
+
+### `grouped`
+
 ```typescript
-const postsByAuthorResolver = yield* MyDatabase.resolver.grouped("PostsByAuthor", {
+const postsByAuthor = yield* MyDatabase.resolver.grouped("PostsByAuthor", {
   Id: Users.select.fields.id,
   Result: Posts.select,
   ResultId: (post) => post.authorId,
   execute: (db, authorIds) =>
     db.selectFrom("posts").where("authorId", "in", authorIds).selectAll(),
 });
-
-// Returns posts grouped by author
-const postsByAuthor = yield* Effect.all(
-  authorIds.map(id => postsByAuthorResolver.execute(id)),
-  { batching: true }
-);
 ```
 
-### `ordered` - Maintain request order
+### `ordered`
+
 ```typescript
-const orderedUserResolver = yield* MyDatabase.resolver.ordered("OrderedUser", {
+const orderedUsers = yield* MyDatabase.resolver.ordered("OrderedUser", {
   Id: Users.select.fields.id,
   Result: Users.select,
   ResultId: (user) => user.id,
   execute: (db, ids) =>
     db.selectFrom("users").where("id", "in", ids).selectAll(),
 });
-
-// Results maintain the same order as input IDs
-const users = yield* Effect.all(
-  userIds.map(id => orderedUserResolver.execute(id)),
-  { batching: true }
-);
 ```
 
-### `void` - Batch operations with no return
-```typescript
-const deleteUsersResolver = yield* MyDatabase.resolver.void("DeleteUsers", {
-  Id: Users.select.fields.id,
-  execute: (db, ids) =>
-    db.deleteFrom("users").where("id", "in", ids),
-});
+### `void`
 
-// Batch delete users
-yield* Effect.all(
-  userIds.map(id => deleteUsersResolver.execute(id)),
-  { batching: true }
-);
+```typescript
+const deleteUsers = yield* MyDatabase.resolver.void("DeleteUsers", {
+  Request: Users.select.fields.id,
+  execute: (db, ids) => db.deleteFrom("users").where("id", "in", ids),
+});
 ```
 
 ## Transactions
 
-### Automatic Transaction Management
 ```typescript
 const createUserWithPost = Effect.gen(function* () {
-  const user = yield* createUser({
-    name: "John Doe",
-    email: "john@example.com",
-  });
-
+  const user = yield* createUser({ name: "John", email: "john@example.com" });
   const post = yield* createPost({
-    title: "First Post",
-    content: "Hello world!",
+    title: "First post",
+    content: "Hello",
     authorId: user.id,
   });
-
   return { user, post };
-}).pipe(
-  MyDatabase.withTransaction, // Wraps in transaction
-  Effect.provide(databaseLayer)
+}).pipe(MyDatabase.withTransaction, Effect.provide(databaseLayer), Effect.scoped);
+```
+
+Or use the SQL client directly:
+
+```typescript
+yield* MyDatabase.pipe(
+  Effect.flatMap(({ sql }) =>
+    sql.withTransaction(
+      Effect.gen(function* () {
+        // … queries
+      }),
+    ),
+  ),
 );
 ```
 
-### Manual Transaction Control
+## Advanced usage
+
+### Raw Kysely through the client
+
 ```typescript
-const manualTransaction = Effect.gen(function* () {
-  const { sql } = yield* MyDatabase;
-  
-  return yield* sql.withTransaction(
-    Effect.gen(function* () {
-      const user = yield* createUser({ name: "John", email: "john@example.com" });
-      const post = yield* createPost({ title: "Post", content: "Content", authorId: user.id });
-      return { user, post };
-    })
-  );
-}).pipe(
-  Effect.provide(databaseLayer)
+const rows = yield* MyDatabase.kysely((db) =>
+  db
+    .selectFrom("users")
+    .innerJoin("posts", "users.id", "posts.authorId")
+    .select(["users.name", "posts.title"])
+    .where("users.id", "=", 1),
 );
 ```
 
-## Advanced Features
+Compiled SQL runs through the Effect SQL client (`sql.unsafe`), so transactions and connection scope from `SqlClient` still apply.
 
-### Direct Kysely Access
-```typescript
-const customQuery = Effect.gen(function* () {
-  const { kysely } = yield* MyDatabase;
-  
-  return yield* kysely(db =>
-    db.selectFrom("users")
-      .innerJoin("posts", "users.id", "posts.authorId")
-      .select(["users.name", "posts.title"])
-      .where("users.id", "=", 1)
-  );
-});
-
-// Or MyDatabase.kysely(db => ...)
-```
-
-### Streaming Large Datasets
-```typescript
-const streamUsers = Effect.gen(function* () {
-  const { sql } = yield* MyDatabase;
-  
-  return yield* sql.executeStream(
-    "SELECT * FROM users WHERE created_at > $1",
-    [new Date("2024-01-01").toISOString()]
-  );
-});
-```
-
-### Custom SQL with Parameters
-```typescript
-const customSql = Effect.gen(function* () {
-  const { sql } = yield* MyDatabase;
-  
-  return yield* sql.execute(
-    "SELECT COUNT(*) as count FROM users WHERE created_at > $1",
-    [new Date("2024-01-01").toISOString()]
-  );
-});
-```
-
-### OpenTelemetry Integration
-```typescript
-const databaseLayer = MyDatabase.layer({
-  acquire: Effect.sync(() => new kysely.Kysely<DatabaseSchema>({ /* config */ })),
-  spanAttributes: [
-    ["db.system", "postgresql"],
-    ["db.name", "myapp"],
-    ["service.name", "user-service"],
-  ],
-});
-```
-
-## Error Handling
-
-All database operations return `Effect` types that properly handle errors:
+### Low-level exports
 
 ```typescript
-const safeUserOperation = Effect.gen(function* () {
-  const user = yield* createUser({
-    name: "John Doe",
-    email: "john@example.com",
-  });
+import {
+  makeKyselyEffect,
+  makeResolver,
+  makeSchema,
+  makeSqlClient,
+} from "effect-sql-kysely";
 
-  return user;
-}).pipe(
-  Effect.catchTag("SqlError", sqlError => ...),
-  Effect.provide(databaseLayer)
-);
+// Build SqlClient from an existing Kysely instance + compiler (see driver modules)
+const sql = yield* makeSqlClient({ database: db, compiler });
+const kyselyEffect = makeKyselyEffect(db, sql);
+const resolver = makeResolver(kyselyEffect);
+const schema = makeSchema(kyselyEffect);
 ```
 
-## Third-Party Integration
+Use a driver module’s `makeSqlClient` when you need that driver’s `makeCompiler()` (Postgres, ClickHouse, …).
 
-### PowerSync Integration
-```typescript
-import { PowerSyncDatabase } from "@powersync/react";
+### OpenTelemetry
 
-const powersyncLayer = MyDatabase.layer({
-  acquire: Effect.sync(() => {
-    export const powerSyncDb = new PowerSyncDatabase({
-      database: {
-        dbFilename: 'test.sqlite'
-      },
-      schema: appSchema
-    });
+Pass `spanAttributes` into `layer` / `makeSqlClient` (see quick start).
 
-    return wrapPowerSyncWithKysely(powerSyncDb);
-  }),
-});
-```
+## Errors
 
-## Type Safety
+Operations fail with `SqlError` (wrapper around structured SQL reasons) and, when schemas are involved, `Schema.SchemaError`. Use `Effect.catchTag("SqlError", …)` or `Cause` helpers as usual.
 
-The library provides full type safety throughout the query chain:
+## Third-party Kysely dialects
 
-```typescript
-// Type-safe table definition
-const Users = Table({
-  id: Generated(Schema.Int),
-  name: Schema.String,
-  email: Schema.String,
-});
-
-// Type-safe query operations
-const createUser = MyDatabase.schema.single({
-  Request: Users.insert,
-  Result: Users.select, // Type-safe result
-  execute: (db, insert) =>
-    db.insertInto("users").values(insert).returningAll(),
-});
-
-// Type-safe usage
-const user: User = yield* createUser({
-  name: "John Doe",
-  email: "john@example.com",
-});
-// user.id is typed as number
-// user.name is typed as string
-// user.email is typed as string
-```
-
-### Utilize Kysely as a query builder only
-
-Note: Be careful of utilizing row transformations in your SqlClient, as if they are not reflected in your Kysely database schema, you may end up with unexpected results.
-
-```typescript
-import { makeKyselyEffect, makeResolver, makeSchema } from 'effect-sql-kysely';
-
-const db = new Kysely<Database>(...);
-const sql = yield* SqlClient;
-const kysely = makeKyselyEffect(db, sql);
-// Construct your resolvers helpers
-const resolver = makeResolver(kysely);
-// Cosntructor your schema helpers
-const schema = makeSchema(kysely);
-
-yield* kysely(db => db.selectFrom("users").selectAll());
-resolver.findById(...)
-schema.findAll(...)
-```
+Any Kysely `Dialect` works as long as you use the matching **Effect SQL statement compiler** (via the correct `effect-sql-kysely/*` import). For example, PowerSync or other SQLite-backed Kysely wrappers typically pair with `effect-sql-kysely/Sqlite` or `SqliteNode`.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome. Please open a pull request.
 
 ## License
 

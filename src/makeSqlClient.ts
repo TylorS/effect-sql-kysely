@@ -1,12 +1,19 @@
-import { Reactivity } from "@effect/experimental";
-import type { SqlConnection } from "@effect/sql";
-import { SqlClient, SqlError, Statement } from "@effect/sql";
-import { Chunk, Effect, Exit, Stream } from "effect";
+import * as Reactivity from "effect/unstable/reactivity/Reactivity";
+import type * as SqlConnection from "effect/unstable/sql/SqlConnection";
+import * as SqlClient from "effect/unstable/sql/SqlClient";
+import * as SqlError from "effect/unstable/sql/SqlError";
+import * as Statement from "effect/unstable/sql/Statement";
+import { Effect, Exit, Stream } from "effect";
 import { squash } from "effect/Cause";
 import { Compilable, CompiledQuery, type Kysely } from "kysely";
 import { beginConnection } from "./internal/beginConnection.js";
 
-const transformRows = Statement.defaultTransforms((s) => s, false).array;
+const defaultTransformRows = Statement.defaultTransforms((s) => s, false).array;
+
+type TransformRows = NonNullable<Parameters<SqlConnection.Connection["execute"]>[2]>;
+
+const toSqlError = (cause: unknown) =>
+  new SqlError.SqlError({ reason: new SqlError.UnknownError({ cause }) });
 
 /**
  * Low-level ability to construct an @effect/sql SqlClient interface for a Kysely database.
@@ -19,62 +26,78 @@ export function makeSqlClient<DB>({
 }: {
   database: Kysely<DB>;
   compiler: Statement.Compiler;
-  spanAttributes?: ReadonlyArray<readonly [string, string]>;
+  spanAttributes?: ReadonlyArray<readonly [string, unknown]>;
   chunkSize?: number;
 }): Effect.Effect<SqlClient.SqlClient, never, Reactivity.Reactivity> {
   class ConnectionImpl implements SqlConnection.Connection {
     constructor(private readonly db: Kysely<DB>) {}
 
+    private queryRows(
+      sql: string,
+      params: ReadonlyArray<unknown>,
+      transformRows: TransformRows | undefined,
+    ) {
+      return Effect.tryPromise({
+        try: () =>
+          this.db.executeQuery(compileSqlQuery(sql, params)).then((result) =>
+            transformRows !== undefined
+              ? transformRows(result.rows as Array<object>)
+              : result.rows,
+          ),
+        catch: toSqlError,
+      });
+    }
+
+    execute(
+      sql: string,
+      params: ReadonlyArray<unknown>,
+      transformRows: TransformRows | undefined,
+    ) {
+      return this.queryRows(sql, params, transformRows);
+    }
+
     executeUnprepared(
       sql: string,
-      params?: ReadonlyArray<unknown> | undefined,
-    ): Effect.Effect<ReadonlyArray<unknown>, SqlError.SqlError> {
-      return Effect.tryPromise({
-        try: () =>
-          this.db.executeQuery(compileSqlQuery(sql, params)).then((r) => transformRows(r.rows)),
-        catch: (cause) => new SqlError.SqlError({ cause }),
-      });
+      params: ReadonlyArray<unknown>,
+      transformRows: TransformRows | undefined,
+    ) {
+      return this.queryRows(sql, params, transformRows);
     }
 
-    execute(sql: string, params: ReadonlyArray<unknown>) {
-      return Effect.tryPromise({
-        try: () =>
-          this.db.executeQuery(compileSqlQuery(sql, params)).then((r) => transformRows(r.rows)),
-        catch: (cause) => new SqlError.SqlError({ cause }),
-      });
-    }
-
-    executeWithoutTransform(sql: string, params: ReadonlyArray<unknown>) {
+    executeRaw(sql: string, params: ReadonlyArray<unknown>) {
       return Effect.tryPromise({
         try: () => this.db.executeQuery(compileSqlQuery(sql, params)).then((r) => r.rows),
-        catch: (cause) => new SqlError.SqlError({ cause }),
+        catch: toSqlError,
       });
     }
 
     executeValues(sql: string, params: ReadonlyArray<unknown>) {
       return Effect.map(this.executeRaw(sql, params), (results) =>
-        results.map((x) => Object.values(x as Record<string, unknown>)),
+        (results as Array<Record<string, unknown>>).map((x) => Object.values(x)),
       );
     }
 
-    executeRaw(sql: string, params?: ReadonlyArray<unknown>) {
-      return Effect.tryPromise({
-        try: () =>
-          this.db.executeQuery(compileSqlQuery(sql, params)).then((r) => transformRows(r.rows)),
-        catch: (cause) => new SqlError.SqlError({ cause }),
-      });
+    executeValuesUnprepared(sql: string, params: ReadonlyArray<unknown>) {
+      return this.executeValues(sql, params);
     }
 
-    executeStream(sql: string, params: ReadonlyArray<unknown>) {
+    executeStream(sql: string, params: ReadonlyArray<unknown>, transformRows: TransformRows | undefined) {
       const query = compileSqlQuery(sql, params);
-      return Stream.suspend(() =>
-        Stream.mapChunks(
-          Stream.fromAsyncIterable(
-            this.db.getExecutor().stream(query, chunkSize),
-            (cause) => new SqlError.SqlError({ cause }),
-          ),
-          Chunk.flatMap((result) => Chunk.unsafeFromArray(result.rows)),
-        ),
+      return Stream.fromIterableEffect(
+        Effect.tryPromise({
+          try: async () => {
+            const rows: Array<unknown> = [];
+            for await (const result of this.db.getExecutor().stream(query, chunkSize)) {
+              const batch =
+                transformRows !== undefined
+                  ? transformRows(result.rows as Array<object>)
+                  : result.rows;
+              rows.push(...batch);
+            }
+            return rows;
+          },
+          catch: toSqlError,
+        }),
       );
     }
   }
@@ -84,6 +107,7 @@ export function makeSqlClient<DB>({
     acquirer: Effect.succeed(new ConnectionImpl(database)),
     // Our SQL statement compiler
     compiler,
+    transformRows: defaultTransformRows,
     // We don't utilize db.transaction() because Sql.client.make will handle the actual transaction
     // But we do ensure that all queries are run within a single connection
     transactionAcquirer: Effect.map(

@@ -1,5 +1,5 @@
 export {
   make,
   makeSqlClient,
-  type SqliteDriverDatabaseConstructor as SqliteDatabaseConstructor,
+  type SqliteDriverDatabaseConstructor as SqliteDoDatabaseConstructor,
 } from "./internal/sqliteDriver.js";
