@@ -1,6 +1,7 @@
-import { SqlError, SqlSchema } from "@effect/sql";
-import { Row } from "@effect/sql/SqlConnection";
-import type { ParseResult, Schema, Types } from "effect";
+import type { Row } from "effect/unstable/sql/SqlConnection";
+import * as SqlError from "effect/unstable/sql/SqlError";
+import * as SqlSchema from "effect/unstable/sql/SqlSchema";
+import type { Schema } from "effect";
 import type * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import type * as Option from "effect/Option";
@@ -10,21 +11,23 @@ type KyselyEffect<DB> = <Out extends Row>(
   f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>,
 ) => Effect.Effect<ReadonlyArray<Out>, SqlError.SqlError, never>;
 
-export function makeSchema<DB, E0 = never, R0 = never>(input: KyselyEffect<DB> | Effect.Effect<KyselyEffect<DB>, E0, R0>) {
+export function makeSchema<DB, E0 = never, R0 = never>(
+  input: KyselyEffect<DB> | Effect.Effect<KyselyEffect<DB>, E0, R0>,
+) {
   const Tag = Effect.isEffect(input) ? input : Effect.succeed(input);
 
   const findAll =
-    <IA, II, IR, A, AI, AR>(options: {
-      readonly Request: Schema.Schema<IA, II, IR>;
-      readonly Result: Schema.Schema<A, AI, AR>;
-      readonly execute: (db: kysely.Kysely<DB>, request: II) => kysely.Compilable<AI>;
+    <Req extends Schema.Constraint, Res extends Schema.Constraint>(options: {
+      readonly Request: Req;
+      readonly Result: Res;
+      readonly execute: (db: kysely.Kysely<DB>, request: Req["Encoded"]) => kysely.Compilable<unknown>;
     }) =>
     (
-      request: IA,
+      request: Req["Type"],
     ): Effect.Effect<
-      ReadonlyArray<A>,
-      ParseResult.ParseError | SqlError.SqlError | E0,
-      IR | AR | R0
+      Array<Res["Type"]>,
+      Schema.SchemaError | SqlError.SqlError | E0,
+      Req["EncodingServices"] | Res["DecodingServices"] | R0
     > =>
       Effect.flatMap(Tag, (kysely) =>
         SqlSchema.findAll({
@@ -35,40 +38,61 @@ export function makeSchema<DB, E0 = never, R0 = never>(input: KyselyEffect<DB> |
       );
 
   const select =
-    <IR, II, IA, A, AI extends object, AR>(options: {
-      readonly Request: Schema.Schema<IA, II, IR>;
-      readonly Result: Schema.Schema<A, AI, AR>;
+    <Req extends Schema.Constraint, Res extends Schema.Constraint>(options: {
+      readonly Request: Req;
+      readonly Result: Res;
       readonly execute: (
         db: kysely.Kysely<DB>,
-        request: II,
-      ) => kysely.Compilable<Types.NoInfer<AI>>;
+        request: Req["Encoded"],
+      ) => kysely.Compilable<Res["Encoded"]>;
     }) =>
     (
-      request: IA,
+      request: Req["Type"],
     ): Effect.Effect<
-      ReadonlyArray<A>,
-      ParseResult.ParseError | SqlError.SqlError | E0,
-      IR | AR | R0
+      Array<Res["Type"]>,
+      Schema.SchemaError | SqlError.SqlError | E0,
+      Req["EncodingServices"] | Res["DecodingServices"] | R0
     > =>
       Effect.flatMap(Tag, (kysely) =>
         SqlSchema.findAll({
-          ...options,
+          Request: options.Request,
+          Result: options.Result,
           execute: (req) => kysely((db) => options.execute(db, req)),
         })(request),
       );
 
   const findOne =
-    <IR, II, IA, AR, AI extends object, A>(options: {
-      readonly Request: Schema.Schema<IA, II, IR>;
-      readonly Result: Schema.Schema<A, AI, AR>;
-      execute: (db: kysely.Kysely<DB>, request: II) => kysely.Compilable<AI>;
+    <Req extends Schema.Constraint, Res extends Schema.Constraint>(options: {
+      readonly Request: Req;
+      readonly Result: Res;
+      execute: (db: kysely.Kysely<DB>, request: Req["Encoded"]) => kysely.Compilable<Res["Encoded"]>;
     }) =>
     (
-      request: IA,
+      request: Req["Type"],
     ): Effect.Effect<
-      Option.Option<A>,
-      ParseResult.ParseError | SqlError.SqlError | E0,
-      IR | AR | R0
+      Option.Option<Res["Type"]>,
+      Schema.SchemaError | SqlError.SqlError | E0,
+      Req["EncodingServices"] | Res["DecodingServices"] | R0
+    > =>
+      Effect.flatMap(Tag, (kysely) =>
+        SqlSchema.findOneOption({
+          ...options,
+          execute: (req) => kysely((db) => options.execute(db, req)),
+        })(request),
+      );
+
+  const single =
+    <Req extends Schema.Constraint, Res extends Schema.Constraint>(options: {
+      readonly Request: Req;
+      readonly Result: Res;
+      readonly execute: (db: kysely.Kysely<DB>, request: Req["Encoded"]) => kysely.Compilable<Res["Encoded"]>;
+    }) =>
+    (
+      request: Req["Type"],
+    ): Effect.Effect<
+      Res["Type"],
+      Schema.SchemaError | Cause.NoSuchElementError | SqlError.SqlError | E0,
+      Req["EncodingServices"] | Res["DecodingServices"] | R0
     > =>
       Effect.flatMap(Tag, (kysely) =>
         SqlSchema.findOne({
@@ -77,35 +101,17 @@ export function makeSchema<DB, E0 = never, R0 = never>(input: KyselyEffect<DB> |
         })(request),
       );
 
-  const single =
-    <IR, II, IA, AR, AI extends object, A>(options: {
-      readonly Request: Schema.Schema<IA, II, IR>;
-      readonly Result: Schema.Schema<A, AI, AR>;
-      readonly execute: (db: kysely.Kysely<DB>, request: II) => kysely.Compilable<AI>;
+  const void_ =
+    <Req extends Schema.Constraint>(options: {
+      readonly Request: Req;
+      readonly execute: (request: Req["Encoded"], db: kysely.Kysely<DB>) => kysely.Compilable<object>;
     }) =>
     (
-      request: IA,
-    ): Effect.Effect<
-      A,
-      ParseResult.ParseError | Cause.NoSuchElementException | SqlError.SqlError | E0,
-      IR | AR | R0
-    > =>
-      Effect.flatMap(Tag, (kysely) =>
-        SqlSchema.single({
-          ...options,
-          execute: (req) => kysely((db) => options.execute(db, req)),
-        })(request),
-      );
-
-  const void_ =
-    <IR, II, IA>(options: {
-      readonly Request: Schema.Schema<IA, II, IR>;
-      readonly execute: (request: II, db: kysely.Kysely<DB>) => kysely.Compilable<object>;
-    }) =>
-    (request: IA): Effect.Effect<void, ParseResult.ParseError | SqlError.SqlError | E0, IR | R0> =>
+      request: Req["Type"],
+    ): Effect.Effect<void, Schema.SchemaError | SqlError.SqlError | E0, Req["EncodingServices"] | R0> =>
       Effect.flatMap(Tag, (kysely) =>
         SqlSchema.void({
-          ...options,
+          Request: options.Request,
           execute: (req) => kysely((db) => options.execute(req, db)),
         })(request),
       );
