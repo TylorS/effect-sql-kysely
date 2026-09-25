@@ -1,12 +1,12 @@
-import { MysqlClient } from "@effect/sql-mysql2";
+import { ClickhouseClient } from "@effect/sql-clickhouse";
 import {
   makeDriverDatabase,
   makeDriverSqlClient,
   type DriverDatabaseConstructor,
 } from "./internal/makeDriverDatabase.js";
 
-const compiler = MysqlClient.makeCompiler();
+const compiler = ClickhouseClient.makeCompiler();
 
 export const make = makeDriverDatabase(compiler);
 export const makeSqlClient = makeDriverSqlClient(compiler);
-export type MySql2DatabaseConstructor<DB, Self> = DriverDatabaseConstructor<DB, Self>;
+export type ClickhouseDatabaseConstructor<DB, Self> = DriverDatabaseConstructor<DB, Self>;

@@ -1,6 +1,8 @@
-import { Reactivity } from "@effect/experimental";
-import { SqlClient, SqlError, Statement } from "@effect/sql";
-import type { Row } from "@effect/sql/SqlConnection";
+import * as Reactivity from "effect/unstable/reactivity/Reactivity";
+import type { Row } from "effect/unstable/sql/SqlConnection";
+import * as SqlClient from "effect/unstable/sql/SqlClient";
+import * as SqlError from "effect/unstable/sql/SqlError";
+import * as Statement from "effect/unstable/sql/Statement";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -13,18 +15,18 @@ import { makeSqlClient, makeKyselyEffect } from "./makeSqlClient.js";
 export interface KyselyDatabase<DB> {
   readonly sql: SqlClient.SqlClient;
   readonly db: kysely.Kysely<DB>;
-  
+
   readonly kysely: <Out extends Row>(
     f: (db: kysely.Kysely<DB>) => kysely.Compilable<Out>,
   ) => Effect.Effect<ReadonlyArray<Out>, SqlError.SqlError, never>;
 }
 
 export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> => {
-  const Tag = Context.Tag<string>(id)<Self, KyselyDatabase<DB>>();
+  const Tag = Context.Service<Self, KyselyDatabase<DB>>()(id);
   const Kysely = Effect.map(Tag, ({ kysely }) => kysely);
 
   const layerWithCompiler: DatabaseConstructor<DB, Self>["layerWithCompiler"] = (options) =>
-    Layer.scoped(
+    Layer.effect(
       Tag,
       Effect.gen(function* () {
         const db = yield* options.acquire;
@@ -45,7 +47,7 @@ export const make = <DB, Self>(id: string): DatabaseConstructor<DB, Self> => {
   });
 };
 
-export interface CoreDatabaseConstructor<DB, Self> extends Context.TagClass<
+export interface CoreDatabaseConstructor<DB, Self> extends Context.ServiceClass<
   Self,
   string,
   KyselyDatabase<DB>
@@ -69,7 +71,7 @@ export interface DatabaseConstructor<DB, Self> extends CoreDatabaseConstructor<D
   readonly layerWithCompiler: <E, R>(options: {
     readonly acquire: Effect.Effect<kysely.Kysely<DB>, E, R | Scope.Scope>;
     readonly compiler: Statement.Compiler;
-    readonly spanAttributes?: ReadonlyArray<readonly [string, string]>;
+    readonly spanAttributes?: ReadonlyArray<readonly [string, unknown]>;
     readonly chunkSize?: number;
   }) => Layer.Layer<Self, E, Exclude<R, Scope.Scope>>;
 }
