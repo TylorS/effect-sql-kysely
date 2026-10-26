@@ -44,9 +44,9 @@
     "vitest": "^4.0.15"
   },
   "peerDependencies": {
-    "@effect/sql": "^0.44.0",
+    "@effect/sql": "^0.44.0 || ^0.52.0",
     "effect": "^3.17.1",
-    "kysely": "^0.28.3"
+    "kysely": "^0.28.3 || ^0.29.0"
   },
   "optionalPeerDependencies": {
     "@effect/sql-mssql": "^0.45.0",
