@@ -59,6 +59,6 @@
   },
   "dependencies": {
     "@effect/experimental": "^0.57.10",
-    "@effect/platform": "^0.93.6"
+    "@effect/platform": "^0.97.0"
   }
 }
